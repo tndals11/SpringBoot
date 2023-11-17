@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 수정(목록을 보여주고 변경)</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        body {
+          font-family: 'Noto Sans KR', sans-serif;
+          background-color: #f7f7f7;
+        }
+        a {
+          text-decoration: none;
+        }
+        .container {
+          width: 100%;
+          max-width: 500px;
+          margin: 0 auto;
+        }
+        table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        tr {
+          height: 40px;
+        }
+        tr td {
+          border: 1px solid #ccc;
+        }
+        tr td:nth-child(1) {
+          background-color: #254def;
+          color: #fff;
+          text-align: center;
+        }
+        tr td:nth-child(2) {
+          color: #fff;
+          padding: 0 5px;
+        }
+        input {
+          width: 100%;
+          border: 0;
+          border: 1px solid #ccc;
+          padding: 8px 4px;
+          outline: 0;
+        }
+        .btn {
+          width: 100%;
+          border: 0;
+          border: 1px solid #ccc;
+          padding: 8px 4px;
+          outline: 0;
+          cursor: pointer;
+          margin-top: 7px;
+          color: black;
+          font-family: 'Noto Sans KR', sans-serif;
+          font-size: 16px
+        }
+        p {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>코리아아이티 상품수정 리스트</h2>
+    <form>
+        <table>
+            <tr>
+                <td>상품명</td>
+                <td>
+                    <input type="text" class="itemName" th:value="${item.itemName}">
+                </td>
+            </tr>
+            <tr>
+                <td>상품가격</td>
+                <td>
+                    <input type="text" class="itemPrice" th:value="${item.itemPrice}">
+                </td>
+            </tr>
+        </table>
+        <button class="btn">상품수정</button>
+        <div>
+            <p>
+                <a href="/users">상품목록</a>
+            </p>
+            <input type="hidden" class="itemId" th:value="${item.itemId}">
+        </div>
+    </form>
+    <script>
+        let itemId =  document.querySelector(".itemId");
+        let itemName = document.querySelector(".itemName");
+        let itemPrice = document.querySelector(".itemPrice");
+        let btn = document.querySelector(".btn").addEventListener('click', (e) => {
+            e.preventDefault();
+
+        if(itemName.value == "") {
+          alert("상품의 이름을 입력해주세요.")
+          itemName.focus();
+          return false;
+        }
+
+        if(itemPrice.value == "") {
+          alert("상품의 값을 입력해주세요")
+          itemPrice.focus();
+          return false;
+        }
+
+        let obj = {
+         itemId: itemId.value,
+         itemName: itemName.value,
+         itemPrice: itemPrice.value
+         };
+
+        $.ajax({
+            type: "post",
+            url: "/admin/updateItem",
+            dataType: "json",
+            data: obj,
+            success: function(res) {
+                if ( res.msg == "success") {
+                    alert("상품이 수정되었습니다.");
+                    location.href="/users";
+
+                } else {
+                    alert("관리자에게 문의하세요");
+                    location.href="/users";
+                }
+            }
+        });
+
+      });
+    </script>
+</div>
+</body>
+</html>
