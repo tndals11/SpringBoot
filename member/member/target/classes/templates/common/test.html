@@ -1,0 +1,351 @@
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+    /* 초기화 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    ul li {
+      list-style: none;
+    }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    a {
+      text-decoration: none;
+    }
+    li {
+      color: black;
+    }
+    /* 헤더/ 상단메뉴 스타일 시작 */
+nav {
+  border: 0;
+  width: 100%;
+  padding-bottom: 20px;
+  box-shadow: 0px 0px 5px 0 rgba(90, 91, 95, 0.4);
+  position: fixed;
+  background-color: white;
+}
+.nav-wrap {
+  background-color: white;
+  width: 1280px;
+  margin: 0 auto;
+  padding: 20px 0;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+}
+.nav-wrap #logo {
+  font-size: 23px;
+  height: 50px;
+}
+.nav-wrap #logo img {
+  width: 100%;
+  height: 150px;
+  margin-top: -30px;
+}
+.nav-wrap ul {
+  display: flex;
+  margin-top: 17px;
+}
+.nav-wrap ul li {
+  list-style: none;
+  font-size: 23px;
+  padding: 6px 22px;
+}
+.nav-wrap ul li:hover {
+  cursor: pointer;
+  background-color: #cf152d;
+  color: white;
+  border-radius: 30px;
+}
+.nav-wrap ul div {
+  margin-right: 30px;
+}
+.nav-wrap ul div img {
+  width: 100%;
+  height: 40px;
+  object-fit: cover;
+}
+.nav-wrap ul div img:hover {
+  cursor: pointer;
+}
+.nav-wrap ul li:nth-child(-n+3) {
+  margin-right: 50px;
+}
+
+  /* 메인 영역 */
+  .main-container {
+    width: 1280px;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    height: 1000px;
+  }
+  .content-wrap {
+    width: 100%;
+  }
+  .content1 {
+    width: 100%;
+    padding-top: 140px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .content1 h1 {
+    font-size: 34px;
+  }
+  .content1 p {
+    font-size: 30px;
+    margin-top: 50px
+  }
+  .content2 {
+    width: 100%;
+    height: 600px;
+    box-shadow:0 5px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+  }
+  #modal-body {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 30px 40px;
+    font-size: 20px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  tr {
+    height: 35px;
+    text-align: center;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    font-size: 18px;
+    background-color: #f7f7f7;
+  }
+  th {
+    background-color: #cf152d;
+    color: white;
+  }
+  .count {
+    text-align: right;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  h2 {
+    text-align: center;
+  }
+  th:nth-child(1) {
+    width: 10%;
+  }
+  td:nth-child(2) {
+    width: 40%;
+    text-align: left;
+    padding-left: 20px;
+  }
+  th:nth-child(3) {
+    width: 10%;
+  }
+  th:nth-child(4) {
+    width: 10%;
+  }
+  th:nth-child(5) {
+    width: 15%;
+  }
+  p {
+    text-align: right;
+  }
+  .page {
+    width: 100%;
+    height: 30px;
+    margin-top: 20px;
+    background-color: #cf152d;
+  }
+  .page ul {
+    width: 100px;
+    display: flex;
+    margin: 0 auto;
+  }
+  .page li a {
+    color: black;
+  }
+  .pagination-container {
+    width: 100%;
+    height: 40px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .pagination{
+    width: 800px;
+    height: 40px;
+    display: flex;
+    margin: 0 auto;
+}
+  .pgn-content {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 30px;
+  }
+  .pgn-content li {
+    display: inline;
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+  }
+  .pgn-content a {
+    color: black;
+    padding: 5px 12px;
+    font-size: 18px;
+    border: 0;
+    margin-left: 5px;
+  }
+
+  .pgn-content a:hover {
+    color: #cf152d;
+  }
+
+  .first:hover, .last:hover, .arrow-left:hover, .arrow-right:hover {
+    color: #cf152d;
+  }
+
+  .first {
+    margin-right: 15px;
+  }
+
+  .last {
+    margin-left: 15px;
+  }
+
+
+  /* footer 스타일 시작 */
+footer {
+  background-color: #444;
+  padding: 30px 0 10px 0;
+}
+.footer-wrap {
+  width: 1280px;
+  height: 200px;
+  margin: 0 auto;
+}
+.footer-wrap h2 {
+  color: white;
+  letter-spacing: 2px;
+  font-size: 25px;
+}
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+}
+.footer-top span {
+  color: white;
+  font-size: 30px;
+  margin-left: 15px;
+}
+.footer-top span i:hover {
+  color: gray;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.footer-bottom {
+  margin-top: 120px;
+  padding-top: 3px;
+  font-size: 10px;
+  color: white;
+  border-top: 1px solid white;
+  text-align: center;
+}
+
+  </style>
+</head>
+<body>
+<!-- 헤더영역 -->
+<div th:replace="~{common/header::test_header_f}"></div>
+
+<!-- 메인 영역 -->
+<main>
+  <div class="main-container">
+    <div class="content-wrap">
+      <div class="content1">
+        <h1>주문내역</h1>
+      </div>
+      <div class="content2">
+        <div id="modal-body">
+          <div class="count">
+            전체주문 수 : <span>0</span>개
+          </div>
+          <table>
+            <thead>
+            <tr>
+              <th>상품번호</th>
+              <th>상품명</th>
+              <th>가격</th>
+              <th>주문상태</th>
+              <th>주문일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>1</td>
+              <td>2</td>
+              <td>3</td>
+              <td>4</td>
+              <td>5</td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="pagination-container">
+            <div class="pagination">
+              <ul class="pgn-content">
+                <li><a href="#" class="first">처음페이지</a></li>
+                <li><a href="#" class="arrow-left">&laquo;</a></li>
+                <li><a href="#" class="active-num">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">6</a></li>
+                <li><a href="#">7</a></li>
+                <li><a href="#">8</a></li>
+                <li><a href="#">9</a></li>
+                <li><a href="#" class="arrow-right">&raquo;</a></li>
+                <li><a href="#" class="last">마지막페이지</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</main>
+
+<!-- footer 영역 -->
+<footer>
+  <div class="footer-wrap">
+    <div class="footer-top">
+      <div class="footer-logo">
+        <h2>KOREA PIZZA</h2>
+      </div>
+      <div class="footer-sns">
+        <span><i class="fa-brands fa-square-facebook"></i></span>
+        <span><i class="fa-brands fa-google"></i></span>
+        <span><i class="fa-brands fa-instagram"></i></span>
+      </div>
+    </div>
+    <div class="footer-bottom">Copyright &copy; 2023 KOREAGROUP.ALL RIGHTS RESERVED</div>
+  </div>
+</footer>
+
+
+</body>
+</html>

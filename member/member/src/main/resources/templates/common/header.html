@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:frgment="~{common/layout::head_f}"></head>
+<body>
+<header th:fragment="test_header_f">
+    <nav>
+        <div class="nav-wrap">
+            <ul>
+                <a href="#"><li>메뉴</li></a>
+                <a href="#"><li>이벤트</li></a>
+                <a href="#"><li>매장</li></a>
+            </ul>
+            <div id="logo">
+                <a href="#"><img th:src="@{images}" alt=""></a>
+            </div>
+            <ul>
+                <a href="./create_user.html"><li>회원가입</li></a>
+                <a href="./login.html"><li>로그인</li></a>
+                <div><img src="./images/cart.png" alt=""></div>
+                <div><img src="./images/person.png" alt=""></div>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+
+
+
+
+<!-- insert : 부분 변경   -->
+    <h1 th:fragment="header_f">코리아아이티 아카데미</h1>
+
+
+<!-- replace : 전체변경 -->
+    <nav th:fragment="nav_f">
+        <a href="">회원가입</a>
+        <a href="">로그인</a>
+    </nav>
+</body>
+</html>
