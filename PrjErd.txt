@@ -1,0 +1,120 @@
+사용자
+create table users (
+user_num int NOT NULL auto_increment,
+user_id varchar(20) NOT NULL,  
+user_passwd text NOT NULL, 
+user_email varchar(100) NOT NULL,
+user_name varchar(20) NOT NULL,
+user_regdate date NOT NULL,
+user_enddate date NOT NULL,
+PRIMARY KEY(user_num)
+);
+
+ON UPDATE CASCADE ON DELETE RESTRICT    
+주문
+
+create table orders(
+order_num int NOT NULL AUTO_INCREMENT, -> primary key 
+order_count INT NOT NULL, --> 총 개수
+order_final_price INT NOT NULL, --> 총 가격
+order_comment varchar(50), --> 요청사항
+order_date DATE NOT NULL,  --> 주문날짜
+order_status varchar(20) NOT NULL, --> 주문 상태창
+PRIMARY KEY(order_num),
+user_num_fk int NOT NULL AUTO_INCREMENT, 
+FOREIGN KEY(user_num_fk) references users(user_num)
+ON UPDATE CASCADE ON DELETE RESTRICT       
+);
+
+
+주문내역 
+create table orderList(
+order_num_fk INT NOT NULL AUTO_INCREMENT,
+item_id_fk INT NOT NULL AUTO_INCREMENT,
+item_cnt INT NOT NULL,
+FOREIGN KEY(order_num_fk) references orders(order_num),  
+FOREIGN KEY(item_id_fk) references items(item_id),
+ON UPDATE CASCADE ON DELETE RESTRICT         
+);
+
+사이즈
+create table size(
+size_id int not null auto_increment 
+size_name char(1),
+primary key(size_id)
+);
+
+상품목록 
+create table items (
+item _id INT NOT NULL AUTO_INCREMENT,
+item_name VARCHAR(20) NOT NULL,
+item_price INT NOT NULL,
+category_id_fk int not null auto_increment,
+size_id_fk int not null auto_increment,
+PRIMARY KEY(item_id),
+FOREIGN KEY(category_id_fk) references category(category_id),
+FOREIGN KEY(size_id_fk) references size(size_id)
+);
+
+카테고리 
+create table category(
+category_id int not null auto_increment,
+category_code varchar(10) NOT NULL ,
+category_name varchar(10) NOT NULL,
+primary key(category_id)	
+);
+
+장바구니 
+create table cart(
+user_num_fk INT NOT NULL,
+item_id_fk INT NOT NULL AUTO_INCREMENT,
+item_cnt INT NOT NULL,
+FOREIGN KEY(user_num_fk) references users(user_num), 
+FOREIGN KEY(item_id_fk) references items(item_id),
+ON UPDATE CASCADE ON DELETE RESTRICT       
+);
+
+===================================================================
+리뷰 페이지 
+create table review(
+review_num INT NOT NULL AUTO_INCREMENT
+user_num_fk INT NOT NULL,
+item_id_fk INT NOT NULL AUTO_INCREMENT,
+regdate date NOT NULL,
+review_content varchar(200),
+score int NOT NULL,
+FOREIGN KEY(user_num_fk) references users(user_num),  
+FOREIGN KEY(item_id_fk) references items(item_id),
+ON UPDATE CASCADE ON DELETE RESTRICT       
+);
+
+
+문의페이지
+create table ask(
+ask_num INT NOT NULL AUTO_INCREMENT
+user_num_fk INT NOT NULL,
+item_id_fk INT NOT NULL AUTO_INCREMENT,
+regdate date NOT NULL,
+ask_content text,
+regdate date,
+FOREIGN KEY(user_num_fk) references users(user_num),   
+FOREIGN KEY(item_id_fk) references items(item_id), 
+ON UPDATE CASCADE ON DELETE RESTRICT       
+);
+
+
+
+
+
+
+
+아이디찾기 페이지
+SELECT user_id FROM users WHERE user_name = 'koreait1234!!' AND user_email= '홍길동' ;
+
+
+비밀번호 찾기 페이지
+SELECT user_passwd FROM users WHERE user_id = 'koreait1234' AND user_email = '홍길동';
+
+
+
+main 높이값 1000px
