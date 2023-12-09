@@ -1,0 +1,75 @@
+ /* footer 스타일 시작 */
+ @charset 'utf-8';
+ @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+    /* footer 스타일 시작 */
+    footer {
+        width: 100%;
+        background-color: #444;
+        padding: 30px 0 10px 0;
+        margin: 0 auto;
+    }
+    .footer-wrap {
+        width: 1280px;
+        margin: 0 auto;
+    }
+    .footer-wrap h2 {
+        color: #aaa;
+        letter-spacing: 2px;
+        font-size: 25px;
+    }
+
+    .footer-top span {
+        color: white;
+        margin-left: 15px;
+    }
+
+    .footer-top span i:hover {
+        color: gray;
+        transition: 0.5s;
+        cursor: pointer;
+    }
+    .footer-top {
+        display: flex;
+        justify-content: space-between;
+    }
+    .footer-sns {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .footer-sns span {
+        color: #aaa;
+        font-size: 25px;
+    }
+    .footer-sns span i:hover {
+        color: white;
+        transition: 0.5s;
+        cursor: pointer;
+    }
+    .footer-content {
+        font-size: 14px;
+        color: #aaa;
+        text-align: left;
+        margin-top: 20px;
+    }
+    .footer-content ul li:nth-child(2) {
+        margin-top: 5px;
+    }
+    .footer-content ul li:nth-child(3) {
+        margin-top: 5px;
+    }
+    .footer-content ul li:nth-child(4) {
+        margin-top: 5px;
+        margin-bottom: 50px;
+    }
+    .footer-bottom {
+        border-top: 1px solid white;
+        font-size: 12px;
+        color: #aaa;
+        text-align: center;
+    }
+    .footer-bottom p {
+        margin-top: 7px;
+
+    .footer-sns a {
+          color: #aaa;
+    }

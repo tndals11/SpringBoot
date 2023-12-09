@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코리아 피자 이벤트 페이지</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <style>
+        /* 타이틀, 메뉴 카테고리 시작 */
+        main {
+          width: 1280px;
+          margin: 0 auto;
+          margin-bottom: 50px;
+        }
+        .main-container {
+          width: 1280px;
+          margin: 0 auto;
+          padding-top: 140px;
+        }
+
+        .title-wrap .title h2 {
+          font-size: 30px;
+          margin-top: 20px;
+          text-align: center;
+        }
+
+        .menu-btn ul {
+          display: flex;
+          justify-content: center;
+          text-align: center;
+          margin-top: 30px;
+          height: 50px;
+        }
+
+        .menu-btn ul li {
+          font-size: 20px;
+          padding: 10px;
+          border-radius: 5px;
+          border: 0;
+          border: 1px solid rgba(204, 204, 204, 0.3);
+          margin-right: 20px;
+        }
+        .menu-btn ul > a {
+          color: rgb(204, 204, 204);
+        }
+        .color-box {
+          background-color: #cf152d;
+          color: white;
+        }
+        .menu-btn ul li:hover {
+          color: white;
+          cursor: pointer;
+          background-color: #cf152d;
+        }
+        .title-wrap .pizza-title h2 {
+          font-size: 30px;
+          text-align: center;
+          margin-top: 30px;
+        }
+
+        /* 이미지 시작 */
+        section {
+          margin-top: 10px;
+        }
+        .section-wrap {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .section-content .img-wrap {
+          width: 400px;
+          padding: 10px;
+          border-radius: 7px;
+          box-shadow:0 5px 20px rgba(0, 0, 0, 0.2);
+          margin: 0 auto;
+          margin-top: 30px;
+        }
+        section .section-wrap .section-content .img-box img {
+          width: 100%;
+        }
+        .section-wrap .section-content h2 {
+          text-align: center;
+          font-size: 20px;
+        }
+        .section-wrap .section-content .img-content ul li:hover {
+          color: white;
+          cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<!--header-->
+<th:block th:replace="~{fragment/header::headerFragment}"></th:block>
+<!--header-->
+
+<!-- main 영역 -->
+<main>
+    <div class="main-container">
+        <div class="main-wrap">
+        <div class="title-wrap">
+            <div class="title">
+                <h2>이벤트</h2>
+            </div>
+            <div class="menu-btn">
+                <ul>
+                    <a th:href="@{/common/eventPage}">
+                        <li class="color-box">진행중인 이벤트</li>
+                    </a>
+                    <a th:href="@{/common/endEventPage}">
+                        <li >종료된 이벤트</li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+        <section>
+            <div class="section-wrap">
+                <div class="section-content">
+                    <div class="img-wrap">
+                        <div class="img-box">
+                            <a href="#"><img src="/images/main_imgs/event1.png" alt="이벤트사진"></a>
+                        </div>
+                        <div class="img-content">
+                            <h2 class="item-name">맛있는조리, 빠른조리</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="img-wrap">
+                        <div class="img-box">
+                            <a href="#"><img src="/images/main_imgs/event2.png" alt="이벤트사진"></a>
+                        </div>
+                        <div class="img-content">
+                            <h2 class="item-name">리뷰작성 이벤트</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="img-wrap">
+                        <div class="img-box">
+                            <a href="#"><img src="/images/main_imgs/event3.png" alt="이벤트사진"></a>
+                        </div>
+                        <div class="img-content">
+                            <h2 class="item-name">크리스마스 특별 이벤트</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="img-wrap">
+                        <div class="img-box">
+                            <a href="#"><img src="/images/main_imgs/event4.png" alt="이벤트사진"></a>
+                        </div>
+                        <div class="img-content">
+                            <h2 class="item-name">방문포장 할인</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+      </div>
+    </div>
+</main>
+
+<!-- footer -->
+<th:block th:replace="~{fragment/footer::footerFragment}"></th:block>
+<!-- footer -->
+
+</body>
+</html>

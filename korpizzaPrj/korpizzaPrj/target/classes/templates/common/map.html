@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코리아 피자 메뉴선택 페이지</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <style>
+        /* 타이틀, 메뉴 카테고리 시작 */
+        main {
+          width: 1280px;
+          margin: 0 auto;
+          padding-top: 140px;
+          margin-bottom: 100px;
+        }
+
+        .title-wrap .title h1 {
+          font-size: 34px;
+          margin-top: 53px;
+          text-align: center;
+        }
+
+        /* 매장안내, 지도 스타일 시작 */
+        section {
+          margin-top: 30px;
+        }
+
+        section h1 {
+          font-size: 35px;
+        }
+
+        section hr {
+          margin-top: 10px;
+          border: 0;
+          border: 1px solid lightgrey;
+        }
+
+        section ul {
+          display: flex;
+          margin-top: 5px;
+
+        }
+
+        section ul div:first-child li {
+          margin-top: 15px;
+          margin-right: 50px;
+          color: #cf152d;
+          font-weight: bolder;
+        }
+
+        section ul div:nth-child(2) li {
+          margin-top: 15px;
+
+        }
+
+        section>div:nth-child(2) {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .btn {
+          height: 60px;
+          border: 0;
+          border-radius: 30px;
+          background-color: #cf152d;
+          color: white;
+          font-size: 20px;
+          margin-top: 50px;
+          padding: 15px 25px;
+          font-family: 'Noto Sans KR', sans-serif;
+        }
+        .map-wrap {
+          margin-top: 50px;
+          width:800px;
+          height:500px;
+        }
+        #map {
+            z-index: 1;
+            width:800px;
+            height:500px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+
+<!--header-->
+<th:block th:replace="~{fragment/header::headerFragment}"></th:block>
+<!--header-->
+
+<main>
+    <div class="title-wrap">
+        <div class="title">
+            <h1>매장안내</h1>
+        </div>
+    </div>
+    <section>
+        <div class="section-wrap">
+            <div class="section-content">
+                <h1>부산본점</h1>
+                <hr>
+                <ul>
+                    <div>
+                        <li>주소</li>
+                        <li>매장전화</li>
+                        <li>지하철</li>
+                        <li>버스 이용시</li>
+                    </div>
+                        <div>
+                        <li>부산광역시 부산진구 중앙대로 668 A1(에이원)프라자 4층</li>
+                        <li>051-914-5890</li>
+                        <li>서면역 1,2호선 서면역 2번출구(도보 5분)
+                        </li>
+                        <li> G : 5-1,10,17,20,23,24,29,43,52,57,66,67,68,80,81,83,
+                            83-1,86,88,99,103,108,111,124,133,138,160,167,168,169-1,583
+                            <br>R : 1000,1002,1004,1010
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <a href=""></a>
+            <div class="map-wrap">
+                <div id="map" ></div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- footer -->
+<th:block th:replace="~{fragment/footer::footerFragment}"></th:block>
+<!-- footer -->
+
+<!-- 카카오 지도 API-->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e617b1200ebda34486bcae88e6030dc6"></script>
+<script>
+     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+             center: new kakao.maps.LatLng(35.15247630364026, 129.059428156735), // 지도의 중심좌표
+               draggable: false, // 지도를 생성할때 지도 이동 및 확대/축소를 막으려면 draggable: false 옵션을 추가하세요
+             level: 3 // 지도의 확대 레벨
+        };
+     var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+     var markerPosition = new kakao.maps.LatLng(35.15247630364026, 129.059428156735);
+
+     var marker = new kakao.maps.Marker({position: markerPosition});
+
+     marker.setMap(map);
+     var iwContent = '<div style="padding:5px;">코리아피자 <br><a href="https://map.kakao.com/link/map/코리아피자,35.15247630364026, 129.059428156735" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/코리아피자,35.15247630364026, 129.059428156735" style="color:blue" target="_blank">길찾기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+       iwPosition = new kakao.maps.LatLng(35.15247630364026, 129.059428156735); //인포윈도우 표시 위치입니다
+
+     var infowindow = new kakao.maps.InfoWindow({
+       position: iwPosition,
+       content: iwContent
+     });
+
+     function relayout() {map.relayout();}
+
+     infowindow.open(map, marker);
+</script>
+</body>
+</html>

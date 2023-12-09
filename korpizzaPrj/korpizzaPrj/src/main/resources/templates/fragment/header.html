@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>header layOut</title>
+</head>
+<body>
+<div th:fragment="headerFragment">
+    <header>
+        <nav>
+            <div class="nav-wrap">
+                <ul>
+                    <a href="#"><li>메뉴</li></a>
+                    <a th:href="@{/common/eventPage}"><li>이벤트</li></a>
+                    <a th:href="@{/common/map}"><li>매장</li></a>
+                </ul>
+                <div id="logo">
+                    <a th:href="@{/common/mainPage}"><img src="/images/main_imgs/logo.png" alt=""></a>
+                </div>
+                <ul>
+                    <a th:href="@{/common/register}"><li>회원가입</li></a>
+                    <a th:href="@{/common/login}"><li>로그인</li></a>
+                    <div class="cart"><a href="/Project/cartPrj/cart.html"><img src="/images/main_imgs/cart.png" alt=""></a></div>
+                    <div class="list"><a href="/Project/userinfoPrj/userinfo/info.html"><img src="/images/main_imgs/list.png" alt=""></a></div>
+                </ul>
+            </div>
+        </nav>
+    </header>
+</div>
+</body>
+</html>
