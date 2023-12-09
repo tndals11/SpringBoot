@@ -17,7 +17,7 @@ public class UserController {
         @Autowired
         UserMapper userMapper;
 
-        @GetMapping("/common/register")
+        @GetMapping("/common/register") // 테스트작업
         public String getRegister() {
 
             return "common/register";
