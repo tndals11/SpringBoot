@@ -16,9 +16,9 @@ public class UserController {
 
         @Autowired
         UserMapper userMapper;
-
+        // 깃허브 데스크탑 테스트
         @GetMapping("/common/register")
-        public String getRegister() {
+        public String getRegister() { 
 
             return "common/register";
         }
