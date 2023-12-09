@@ -155,92 +155,97 @@
 <!-- footer -->
 
 </body>
-<script>
- $(function () {
- let checkID = RegExp(/^[a-z0-9]{6,20}$/);
- let checkPW = RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~!@#$%^&*()_+])[A-Za-z\d~!@#$%^&*()_+]{8,}$/);
- let msg = document.querySelector(".msg");
- let userId = document.querySelector("#userId");
- let userPasswd = document.querySelector("#userPasswd");
+    <script>
+     $(function () {
+     let checkID = RegExp(/^[a-z0-9]{6,20}$/);
+     let checkPW = RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~!@#$%^&*()_+])[A-Za-z\d~!@#$%^&*()_+]{8,}$/);
+     let msg = document.querySelector(".msg");
+     let userId = document.querySelector("#userId");
+     let userPasswd = document.querySelector("#userPasswd");
 
- function checkForm() {
- // 아이디 유효성 체크
- $("#userId").blur(function(){
-         if($("#userId").val() == "" ){
-             $("#id_check").text("아이디를 입력해주세요").css("color", "red");
-             $("#userId").focus();
-             return false;
-         }else{
-             if(!checkID.test($("#userId").val())) {
-                 $("#id_check").text("영문 혹은 영문과 숫자를 조합하여 최소 6자리이상 20자리로 입력해주세요.").css("color", "red");
+     function checkForm() {
+     // 아이디 유효성 체크
+     $("#userId").blur(function(){
+             if($("#userId").val() == "" ){
+                 $("#id_check").text("아이디를 입력해주세요").css("color", "red");
                  $("#userId").focus();
                  return false;
-             } else {
-                 $("#id_check").text("").css("color", "green");
-             }
-                 return true;
-             }
-           });
-
-
-    // 비밀번호
-    $("#userPasswd").blur(function(){
-         if($("#userPasswd").val() == "" ){
-             $("#passwd_check").text("비밀번호를 입력해주세요").css("color", "red");
-             $("#userPasswd").focus();
-             return false;
-         }else{
-             if(!checkPW.test($("#userPasswd").val())) {
-                 $("#passwd_check").text("최소 하나의 영문 대소문자, 숫자, 특수문자를 포함하여 8자리 이상이어야 합니다.").css("color", "red");
-                 // $("#userPasswd").focus();
-                 return false;
-             } else {
-              $("#passwd_check").text("").css("color", "green");
-              return true;
-         }
-       }
-     });
-   }
-
-     checkForm();
-      $('#btn').click(function(e){
-          e.preventDefault();
-
-          if($("#userId").val() == "" || $("#userPasswd").val() == ""){
-              alert("공백을 입력하세요.");
-              return false;
-          } else if( !checkID.test($("#userId").val() ) || !checkPW.test( $("#userPasswd").val() ) ) {
-              alert("형식에 맞춰 작성해주세요.")
-              return false;
-          }
-
-             let obj = {
-                 userId: userId.value,
-                 userPasswd: userPasswd.value
-             };
-            // obj error (object, Object) ==> 오류
-            // JSON.stringify => 문자열로 변환후 값을 보내줘야한다
-
-           $.ajax({
-                type: "post",
-                url: "/common/checkLogin",
-                data: JSON.stringify(obj),
-                contentType : "application/json",
-                success: function(result) {
-                if ( result == 'success' ) {
-                      alert('성공');
-                } else {
-                    $("#passwd_check").text("비밀번호와 아이디를 다시 확인해주세요.").css("color", "red");
-                    $("#passwd_check")[0].style.textAlign = 'center';
-                     $("#passwd_check")[0].style.marginTop = '5px';
-                    $("#userId").focus();
+             }else{
+                 if(!checkID.test($("#userId").val())) {
+                     $("#id_check").text("영문 혹은 영문과 숫자를 조합하여 최소 6자리이상 20자리로 입력해주세요.").css("color", "red");
+                     $("#userId").focus();
                      return false;
-                }
+                 } else {
+                     $("#id_check").text("").css("color", "green");
+                 }
+                     return true;
+                 }
+               });
+
+
+        // 비밀번호
+        $("#userPasswd").blur(function(){
+             if($("#userPasswd").val() == "" ){
+                 $("#passwd_check").text("비밀번호를 입력해주세요").css("color", "red");
+                 $("#userPasswd").focus();
+                 return false;
+             }else{
+                 if(!checkPW.test($("#userPasswd").val())) {
+                     $("#passwd_check").text("최소 하나의 영문 대소문자, 숫자, 특수문자를 포함하여 8자리 이상이어야 합니다.").css("color", "red");
+                     // $("#userPasswd").focus();
+                     return false;
+                 } else {
+                  $("#passwd_check").text("").css("color", "green");
+                  return true;
              }
-           });
+           }
+         });
+       }
+
+         checkForm();
+          $('#btn').click(function(e){
+              e.preventDefault();
+
+              if($("#userId").val() == "" || $("#userPasswd").val() == ""){
+                  alert("공백을 입력하세요.");
+                  return false;
+              } else if( !checkID.test($("#userId").val() ) || !checkPW.test( $("#userPasswd").val() ) ) {
+                  alert("형식에 맞춰 작성해주세요.")
+                  return false;
+              }
+
+
+                // obj error (object, Object) ==> 오류
+                // JSON.stringify => 문자열로 변환후 값을 보내줘야한다
+                // contentType : "application/json",
+
+                let obj = {
+                    userId: userId.value,
+                    userPasswd: userPasswd.value,
+                };
+
+
+
+               $.ajax({
+                    type: "post",
+                    url: "/common/checkLogin",
+                    contentType : "application/json;charset=UTF-8",
+                    data : JSON.stringify(obj),
+                    success: function(result) {
+                    if ( result == 'success' ) {
+                          location.href = "/user/afterLogin";
+                    } else {
+                        $("#passwd_check").text("비밀번호와 아이디를 다시 확인해주세요.").css("color", "red");
+                        $("#passwd_check")[0].style.textAlign = 'center';
+                         $("#passwd_check")[0].style.marginTop = '5px';
+                        $("#userId").focus();
+                         return false;
+                    }
+                 }
+               });
+
+          });
 
       });
-
-  });
 </script>
 </html>

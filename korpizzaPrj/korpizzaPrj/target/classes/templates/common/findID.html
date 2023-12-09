@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/reset.css}">
@@ -113,14 +112,15 @@
             <h1>아이디 찾기</h1>
         </div>
         <div class="main-wrap">
-            <form action="#" method="post" autocapitalize="off">
+            <form action="#"  autocapitalize="off">
                 <div class="int-area">
-                    <label for="name">이름</label>
-                    <input type="text" id="name" name="name" required placeholder="이름을 입력해주세요">
+                    <label>이름</label>
+                    <input type="text" id="userName" name="userName" required placeholder="이름을 입력해주세요">
                 </div>
                 <div class="int-area">
-                    <label for="email">이메일</label>
-                    <input type="email" id="email" name="email" required placeholder="이메일을 입력해주세요.">
+                    <label>이메일</label>
+                    <input type="email" id="userEmail" name="userEmail" required placeholder="이메일을 입력해주세요.">
+                    <p id="#findID_check"></p>
                 </div>
                 <div class="btn-area">
                     <button type="submit" id="btn">아이디 찾기</button>
@@ -135,32 +135,50 @@
 <!-- footer -->
 
 <script>
+    let userName = document.querySelector("#userName");
+    let userEmail = document.querySelector("#userEmail");
+    let checkName = RegExp(/^[가-힣]|[A-Z]|[a-z]$/);
+    let checkEmail = RegExp(/^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/);
 
-    // 오류 확인
-<!--    function checkFindID() {-->
-<!--        let userName = document.querySelector("#userName");-->
-<!--        let userEmail = document.querySelector("#userEmail");-->
+       $('#btn').click(function(e){
+           e.preventDefault();
 
-<!--    let obj = {-->
-<!--        userName: userName.value,-->
-<!--        userEmail: userEmail.value-->
-<!--    }-->
-<!--        console.log(obj);-->
-<!--    $.ajax({-->
-<!--               type: "post",-->
-<!--               url: "/common/checkFindID",-->
-<!--               dataType: "json",-->
-<!--               data: obj,-->
-<!--               success: function( result ) {-->
-<!--               if ( result.FindID != null ) {-->
-<!--                   alert(result.FindID);-->
-<!--               } else {-->
-<!--                   alert("아이디 찾기에 실패하였습니다/n다시 한번 확인해주세요.");-->
+           if($("#userName").val() == "" || $("#userEmail").val() == ""){
+               alert("공백을 입력하세요.");
+               return false;
+           } else if( !checkName.test($("#userName").val() ) || !checkEmail.test( $("#userEmail").val() ) ) {
+               alert("형식에 맞춰 작성해주세요.")
+               return false;
+           }
 
-<!--               }-->
-<!--       }-->
-<!--   });-->
-<!--    }-->
+
+             // obj error (object, Object) ==> 오류
+             // JSON.stringify => 문자열로 변환후 값을 보내줘야한다
+             // contentType : "application/json",
+
+             let obj = {
+                 userName: userName.value,
+                 userEmail: userEmail.value,
+             };
+
+            $.ajax({
+                 type: "post",
+                 url: "/common/checkFindID",
+                 contentType : "application/json;charset=UTF-8",
+                 data : JSON.stringify(obj),
+                 success: function(result) {
+                 if ( result == "success" ) {
+                      location.href = "/user/afterLogin";
+                 } else {
+                     alert("이름과 이메일을 다시 확인해주세요");
+                     location.href = "/common/findID";
+                     $("#userId").focus();
+                      return false;
+                 }
+              }
+            });
+
+       });
 
 
 

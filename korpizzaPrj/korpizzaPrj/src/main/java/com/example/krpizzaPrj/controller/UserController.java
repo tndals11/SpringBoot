@@ -17,7 +17,7 @@ public class UserController {
         @Autowired
         UserMapper userMapper;
 
-        
+
         @GetMapping("/common/register")
         public String getRegister() { 
 
@@ -73,28 +73,38 @@ public class UserController {
 
     @PostMapping("/common/checkLogin")
     @ResponseBody
-    public String checkLogin(@ModelAttribute UserDto userDto) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
+    public String checkLogin(@RequestBody UserDto userDto) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
+
         UserDto checkLogin = userMapper.checkLogin(userDto);
-        System.out.println(checkLogin);
+        System.out.println(userDto);
+
         String msg = "";
         if( checkLogin != null ) {
             msg = "success";
         } else {
             msg = "fail";
         }
-
+        System.out.println(msg);
         return msg;
     }
 
-    //        @PostMapping("/common/checkFindID")
-//        @ResponseBody
-//        public Map<String, Object> checkFindID(@RequestParam String userName, @RequestParam String userEmail ) {
-//            Map<String, Object> map = new HashMap<>();
-//
-//
-//            return Map.of("FindID", userMapper.checkFindID(userName, userEmail));
-//        }
-//
+        @PostMapping("/common/checkFindID")
+        @ResponseBody
+        public String checkFindID(@RequestBody UserDto userDto) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
+
+            UserDto result = userMapper.checkFindID(userDto);
+            System.out.println(userDto);
+
+            String msg = "";
+            if ( result != null) {
+                msg = "success";
+            } else {
+                msg = "fail";
+                System.out.println(msg);
+            }
+            return msg;
+        }
+
     @GetMapping("/common/mainPage")
     public String getMainPage() {
 

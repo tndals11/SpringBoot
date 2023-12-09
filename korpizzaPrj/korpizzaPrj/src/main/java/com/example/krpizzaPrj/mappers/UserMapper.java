@@ -5,10 +5,9 @@ package com.example.krpizzaPrj.mappers;
 import com.example.krpizzaPrj.dto.UserDto;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -22,12 +21,10 @@ public interface UserMapper {
         @Select("SELECT COUNT(*) FROM users WHERE user_email = #{userEmail}")
         public int getCheckUserEmail(String userEmail);
 
-        @Select("SELECT users.user_Id FROM users WHERE user_name = #{userName} AND user_email = #{userEmail}")
-        public Map<String, Object> checkFindID(String userName, String userEmail);
+        @Select("SELECT users.user_id FROM users WHERE user_name = #{userName} AND user_email = #{userEmail}")
+        public UserDto checkFindID( UserDto userDto );
 
-        @Select("SELECT user_id as userId, user_pw as user_passwd FROM users WHERE user_id = #{userId} AND user_pw = #{userPasswd}")
+        @Select("SELECT  user_id as userId, user_pw as userPasswd FROM users WHERE  user_id = #{userId} AND user_pw = #{userPasswd}")
         public UserDto checkLogin(UserDto userDto);
-
-
 
     }
