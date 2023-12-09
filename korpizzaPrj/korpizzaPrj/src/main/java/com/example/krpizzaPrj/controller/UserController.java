@@ -16,7 +16,8 @@ public class UserController {
 
         @Autowired
         UserMapper userMapper;
-        // 깃허브 데스크탑 테스트
+
+        
         @GetMapping("/common/register")
         public String getRegister() { 
 
@@ -70,36 +71,42 @@ public class UserController {
             return "common/login";
         }
 
-        @PostMapping("/common/checkLogin")
-        @ResponseBody
-        public Map<String, Object> checkLogin(@RequestParam String userId, @RequestParam String userPasswd ) {
-            Map<String, Object> map = new HashMap<>();
-
-
-            return Map.of("checkLogin", userMapper.checkLogin(userId,userPasswd ));
+    @PostMapping("/common/checkLogin")
+    @ResponseBody
+    public String checkLogin(@ModelAttribute UserDto userDto) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
+        UserDto checkLogin = userMapper.checkLogin(userDto);
+        System.out.println(checkLogin);
+        String msg = "";
+        if( checkLogin != null ) {
+            msg = "success";
+        } else {
+            msg = "fail";
         }
 
-        @PostMapping("/common/checkFindID")
-        @ResponseBody
-        public Map<String, Object> checkFindID(@RequestParam String userName, @RequestParam String userEmail ) {
-            Map<String, Object> map = new HashMap<>();
+        return msg;
+    }
 
+    //        @PostMapping("/common/checkFindID")
+//        @ResponseBody
+//        public Map<String, Object> checkFindID(@RequestParam String userName, @RequestParam String userEmail ) {
+//            Map<String, Object> map = new HashMap<>();
+//
+//
+//            return Map.of("FindID", userMapper.checkFindID(userName, userEmail));
+//        }
+//
+    @GetMapping("/common/mainPage")
+    public String getMainPage() {
 
-            return Map.of("FindID", userMapper.checkFindID(userName, userEmail));
-        }
+        return "common/mainPage";
+    }
+    @GetMapping("/user/afterLogin")
+    public String getAfterLogin() {
 
-        @GetMapping("/common/mainPage")
-        public String getMainPage() {
+        return "user/afterLogin";
+    }
 
-            return "common/mainPage";
-        }
-        @GetMapping("/user/afterLogin")
-        public String getAfterLogin() {
-
-            return "user/afterLogin";
-        }
-
-        @GetMapping("/common/map")
+    @GetMapping("/common/map")
         public String getMap() {
 
             return "common/map";

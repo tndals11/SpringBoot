@@ -25,6 +25,9 @@ public interface UserMapper {
         @Select("SELECT users.user_Id FROM users WHERE user_name = #{userName} AND user_email = #{userEmail}")
         public Map<String, Object> checkFindID(String userName, String userEmail);
 
-        @Select("SELECT COUNT(*) FROM users WHERE user_id = #{userId} AND user_pw = #{userPasswd} ")
-        public int checkLogin(String userId, String userPasswd);
+        @Select("SELECT user_id as userId, user_pw as user_passwd FROM users WHERE user_id = #{userId} AND user_pw = #{userPasswd}")
+        public UserDto checkLogin(UserDto userDto);
+
+
+
     }

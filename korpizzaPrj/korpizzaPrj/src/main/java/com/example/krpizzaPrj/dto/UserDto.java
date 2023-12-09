@@ -64,5 +64,18 @@ public class UserDto {
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "userNum=" + userNum +
+                ", userId='" + userId + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userPasswd='" + userPasswd + '\'' +
+                ", regDate='" + regDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                '}';
+    }
 }
 

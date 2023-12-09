@@ -109,26 +109,28 @@
 <th:block th:replace="~{fragment/header::headerFragment}"></th:block>
 <!--header-->
 
-<!-- main영역 -->
 <main>
     <div class="container">
         <div class="main-title">
             <h1>로그인</h1>
         </div>
-        <form action="/common/checkLogin" method="post" autocapitalize="off" onsubmit="return frmCheck()">
+        <form action="#" method="post" autocapitalize="off" >
             <div class="int-area">
                 <p>반갑습니다. <br>로그인하고 더 큰 혜택을 즐기세요</p>
                 <label>아이디</label>
                 <input type="text"  id="userId" name="userId"  placeholder="아이디를 입력해주세요">
+                <div class="check_font" id="id_check"></div>
             </div>
             <div class="int-area">
                 <label>비밀번호</label>
                 <input type="password" id="userPasswd" name="userPasswd"  placeholder="비밀번호를 입력해주세요.">
+                <div class="check_font" id="passwd_check"></div>
                 <p class="msg"></p>
             </div>
             <div class="btn-area">
                 <button type="submit" id="btn">로그인</button>
             </div>
+
             <div class="caption-wrap">
                 <div class="caption">
                     <ul>
@@ -154,43 +156,91 @@
 
 </body>
 <script>
-    function frmCheck() {
-        let userId = document.querySelector('#userId');
-        let userPasswd = document.querySelector('#userPasswd');
+ $(function () {
+ let checkID = RegExp(/^[a-z0-9]{6,20}$/);
+ let checkPW = RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~!@#$%^&*()_+])[A-Za-z\d~!@#$%^&*()_+]{8,}$/);
+ let msg = document.querySelector(".msg");
+ let userId = document.querySelector("#userId");
+ let userPasswd = document.querySelector("#userPasswd");
 
-        if ( userId.value == '') {
-            alert('아이디를 입력해주세요');
-            userId.focus();
-            return false;
-        }
+ function checkForm() {
+ // 아이디 유효성 체크
+ $("#userId").blur(function(){
+         if($("#userId").val() == "" ){
+             $("#id_check").text("아이디를 입력해주세요").css("color", "red");
+             $("#userId").focus();
+             return false;
+         }else{
+             if(!checkID.test($("#userId").val())) {
+                 $("#id_check").text("영문 혹은 영문과 숫자를 조합하여 최소 6자리이상 20자리로 입력해주세요.").css("color", "red");
+                 $("#userId").focus();
+                 return false;
+             } else {
+                 $("#id_check").text("").css("color", "green");
+             }
+                 return true;
+             }
+           });
 
-          if ( userPasswd.value == '') {
-            alert('비밀번호를 입력해주세요');
-            userPasswd.focus();
-            return false;
-        }
 
-         let obj = {
-            userId: userId.value,
-            userPasswd: userPasswd.value,
-        };
+    // 비밀번호
+    $("#userPasswd").blur(function(){
+         if($("#userPasswd").val() == "" ){
+             $("#passwd_check").text("비밀번호를 입력해주세요").css("color", "red");
+             $("#userPasswd").focus();
+             return false;
+         }else{
+             if(!checkPW.test($("#userPasswd").val())) {
+                 $("#passwd_check").text("최소 하나의 영문 대소문자, 숫자, 특수문자를 포함하여 8자리 이상이어야 합니다.").css("color", "red");
+                 // $("#userPasswd").focus();
+                 return false;
+             } else {
+              $("#passwd_check").text("").css("color", "green");
+              return true;
+         }
+       }
+     });
+   }
 
+     checkForm();
+      $('#btn').click(function(e){
+          e.preventDefault();
 
-        $.ajax({
-            type: "post",
-            url: "/common/checkLogin",
-            dataType : 'json',
-            data: obj,
-            success: function(result) {
-                    if ( result.checkLogin == '1' ) {
-                       location.href="/user/afterLogin";
-                    }
+          if($("#userId").val() == "" || $("#userPasswd").val() == ""){
+              alert("공백을 입력하세요.");
+              return false;
+          } else if( !checkID.test($("#userId").val() ) || !checkPW.test( $("#userPasswd").val() ) ) {
+              alert("형식에 맞춰 작성해주세요.")
+              return false;
+          }
+
+             let obj = {
+                 userId: userId.value,
+                 userPasswd: userPasswd.value
+             };
+            // obj error (object, Object) ==> 오류
+            // JSON.stringify => 문자열로 변환후 값을 보내줘야한다
+
+           $.ajax({
+                type: "post",
+                url: "/common/checkLogin",
+                data: JSON.stringify(obj),
+                contentType : "application/json",
+                success: function(result) {
+                if ( result == 'success' ) {
+                      alert('성공');
                 } else {
-                  $(".msg").html("아이디와 비밀번호를 다시 확인해주세요").css(color, red);
-                   userId.focus();
+                    $("#passwd_check").text("비밀번호와 아이디를 다시 확인해주세요.").css("color", "red");
+                    $("#passwd_check")[0].style.textAlign = 'center';
+                     $("#passwd_check")[0].style.marginTop = '5px';
+                    $("#userId").focus();
+                     return false;
                 }
-            }
-        });
-    }
+             }
+           });
+
+      });
+
+  });
 </script>
 </html>
