@@ -3,8 +3,11 @@ package com.example.krpizzaPrj.controller;
 
 import com.example.krpizzaPrj.dto.UserDto;
 import com.example.krpizzaPrj.mappers.UserMapper;
+import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -90,8 +93,8 @@ public class UserController {
 
         @PostMapping("/common/checkFindID")
         @ResponseBody
-        public String checkFindID(@RequestBody UserDto userDto) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
-
+        public Map<String, Object> checkFindID(@RequestBody UserDto userDto) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
+            Map<String, Object> map = new HashMap<>();
             UserDto result = userMapper.checkFindID(userDto);
             System.out.println(userDto);
 
@@ -100,10 +103,21 @@ public class UserController {
                 msg = "success";
             } else {
                 msg = "fail";
-                System.out.println(msg);
             }
-            return msg;
+
+            map.put("msg", msg); // --> 메세지를 보낼려고 쓴것
+            map.put("userId", result.getUserId() ); // url 담을려고 변수명 userId에 getUserId를 받아옴
+
+            return map;
         }
+
+    @GetMapping("/user/viewFindId")
+    public String viewFindId(@RequestParam String userId, Model model) {
+        System.out.println("userId : " + userId);
+        model.addAttribute("userId", userId);
+        return "user/viewFindId";
+    }
+
 
     @GetMapping("/common/mainPage")
     public String getMainPage() {
