@@ -147,4 +147,6 @@ public class UserController {
         public String getOriginal() {
             return "common/original";
         }
+
+        // 테스트
 }
