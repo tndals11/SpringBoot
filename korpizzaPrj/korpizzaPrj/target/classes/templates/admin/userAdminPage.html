@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 회원관리 페이지</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+        /* 리셋 시작 */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Noto Sans KR', sans-serif;
+        }
+        ul li {
+          list-style: none;
+        }
+        a {
+          color: black;
+          text-decoration: none;
+        }
+        /*----------------------------------------------------*/
+        .side-container {
+          height: 100%;
+          width: 200px;
+          position: fixed;
+          z-index: 1;
+          background-color: #212529;
+          overflow-x: hidden;
+          padding-top: 10px;
+          top: 0;
+          left: 0;
+          margin: 0;
+          padding: 0;
+        }
+
+        .img-wrap {
+          background-color: black;
+          padding-bottom: 10px;
+        }
+
+        .img-box {
+          width: 150px;
+          margin: 0 auto;
+          border-radius: 50%;
+          background-color: white;
+          overflow: hidden;
+          margin-top: 10px;
+        }
+
+        .img-wrap .img-box img {
+          width: 100%;
+          padding: 5px;
+        }
+
+        .img-wrap p {
+          color: white;
+          text-align: center;
+          margin-top: 10px;
+          font-weight: bold;
+        }
+
+        .body-container {
+          margin: 0;
+          padding: 0;
+        }
+
+        .main-container {
+          margin: auto;
+          margin-left: 160px;
+          max-width: 100%;
+        }
+
+        .content-container {
+          padding: 20px;
+          width: 100%;
+        }
+
+        /* side 메뉴바 스타일 */
+        #menu {
+          line-height: 50px;
+          margin: 0 auto;
+          margin-top: 5px;
+        }
+        #menu>ul>li:not(.open):hover {
+          cursor: pointer;
+          background-color: #cf152d;
+          border-radius: 3px;
+        }
+
+        .open a {
+          display: block;
+        }
+
+        .open a:hover {
+          position: relative;
+          cursor: pointer;
+          background-color: #cf152d;
+          border-radius: 3px;
+        }
+
+        .sub-menu {
+          display: none;
+          position: absolute;
+          overflow: auto;
+        }
+
+        .open:hover .sub-menu {
+          display: block;
+        }
+
+        .sub-menu a{
+          display: block;
+          margin: 0 63px;
+        }
+
+        .sub-menu li:hover {
+          background-color: #cf152d;
+          border-radius: 3px;
+
+        }
+
+        #menu>ul li a {
+          color: white;
+        }
+
+        #menu ul li i {
+          margin-left: 35px;
+          margin-right: 20px;
+        }
+
+        .go-to h4 {
+          color: white;
+          position: absolute;
+          bottom: 8px;
+          left: 10px;
+        }
+
+        .go-to h4:hover {
+          color: #ccc;
+        }
+
+        .go-to h4 i {
+          margin-right: 5px;
+        }
+
+        /* 메인 컨테이너 스타일 시작 */
+
+        .main-container {
+          height: 1000px;
+          padding-left: 30px;
+          background-color: #f6f6f6;
+        }
+
+        .content-wrap {
+          background-color: white;
+          padding-bottom: 50px;
+          margin-bottom: 40px;
+        }
+
+        .content-wrap hr {
+          border: 0;
+          border: 1px solid whitesmoke;
+          margin-top: 10px;
+        }
+         .header-title h2 {
+              font-size: 35px;
+              margin-bottom: 10px;
+          }
+        .user-list p {
+          margin-top: 15px;
+          margin-left: 20px;
+          font-size: 16px;
+        }
+
+        .content-wrap select {
+          margin-top: 15px;
+          margin-left: 18px;
+        }
+
+        .top-option {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .content-wrap .search-wrap {
+          /* margin-right: 50px; */
+          margin-top: 15px;
+          margin-right: 18px;
+        }
+
+        .user-list table {
+          margin: 10px auto;
+          width: 98%;
+          border-collapse: collapse;
+          text-align: center;
+        }
+
+        .user-list th {
+          border: 3px solid #eee;
+        }
+        form {
+           margin-right: 17px;
+        }
+    th {
+      padding: 15px 30px;
+    }
+    td {
+      border: 2px solid #eee;
+      padding: 10px 20px;
+    }
+    .blue {
+      background-color: royalblue;
+      color: white;
+    }
+    .tomato {
+      background-color: tomato;
+      color: white;
+    }
+    .black {
+        background-color: black;
+        color: white;
+    }
+    .open button {
+      border: 0;
+      padding: 5px 15px;
+      font-family: 'Noto Sans KR', sans-serif;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+         .user-btn {
+      text-align: end;
+    }
+    .user-btn button {
+      padding: 10px 20px;
+      border: 0;
+      background-color: tomato;
+      margin-right: 18px;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+        /* .user-list tr:nth-child(even) {
+          background-color: #f6f6f6;
+        } */
+
+    </style>
+</head>
+<body>
+<div class="body-container">
+    <aside class="side-container">
+        <div class="img-wrap">
+            <div class="img-box">
+                <img src="../images/admin_logo2.png" alt="">
+            </div>
+            <div class="img-content">
+                <p>관리자님 환영합니다.</p>
+            </div>
+        </div>
+
+        <div id="menu">
+            <ul>
+                <li><a href="#"><i class="fa-solid fa-house"></i>홈으로</a>
+                    <!-- <ul>
+                        <li><a href="#">SUB_MENU</a></li>
+                        <li><a href="#">SUB_MENU2</a></li>
+                        <li><a href="#">SUB_MENU3</a></li>
+                      </ul> -->
+                </li>
+
+                <li><a href="#"><i class="fa-solid fa-cart-shopping"></i>주문관리</a>
+                    <!-- <ul>
+                        <li><a href="#">SUB_MENU</a></li>
+                        <li><a href="#">SUB_MENU2</a></li>
+                        <li><a href="#">SUB_MENU3</a></li>
+                      </ul> -->
+                </li>
+
+                <li><a href="#"><i class="fa-solid fa-gift"></i>메뉴관리</a>
+                    <!-- <ul>
+                        <li><a href="#">SUB_MENU</a></li>
+                        <li><a href="#">SUB_MENU2</a></li>
+                        <li><a href="#">SUB_MENU3</a></li>
+                      </ul> -->
+                </li>
+
+                <li><a href="#"><i class="fa-solid fa-user"></i>회원관리</a>
+                    <!-- <ul>
+                      <li><a href="#">SUB_MENU</a></li>
+                      <li><a href="#">SUB_MENU2</a></li>
+                      <li><a href="#">SUB_MENU3</a></li>
+                    </ul> -->
+                </li>
+
+                <li class="open">
+                    <a href="#"><i class="fa-solid fa-list-ul"></i>게시판관리</a>
+                    <ul class="sub-menu">
+                        <li><a href="#">리뷰게시판</a></li>
+                        <li><a href="#">문의게시판</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="go-to"><a href="">
+            <h4><i class="fa-solid fa-right-from-bracket"></i>로그아웃</h4>
+        </a></div>
+    </aside>
+    <div class="main-container">
+        <div class="content-container">
+            <header>
+                <div class="header-title">
+                    <h2>회원목록</h2>
+                </div>
+            </header>
+            <hr>
+            <div class="content-wrap">
+                <div class="user-list">
+                    <hr>
+                    <div class="top-option">
+                        <p>게시물 개수 : [[${cnt}]] 개</p>
+                        <form method="get" action="/admin/userAdminPage" onsubmit="return searchList()">
+                            <select name="searchType" id="searchType">
+                                <option value="">선택</option>
+                                <option value="userid">아이디</option>
+                                <option value="username">이름</option>
+                            </select>
+                            <input type="text" name="words" placeholder="검색어 입력">
+                            <input type="submit" value="검색">
+                        </form>
+                    </div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>회원번호</th>
+                            <th>회원아이디</th>
+                            <th>이름</th>
+                            <th>가입일</th>
+                            <th>비고</th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="m : ${mem}">
+                        <tr class="open">
+                            <td>[[${m.userNum}]]</td>
+                            <td>[[${m.userId}]]</td>
+                            <td>[[${m.userName}]]</td>
+                            <td>[[${m.userRegDate}]]</td>
+                            <td>
+                                <button class="blue" th:onclick="viewUser([[${m.userNum}]])">보기</button>
+                                <button class="black" th:onclick="updateUser()">수정</button>
+                                <button class="tomato" th:onclick="deleteUser([[${m.userNum}]])">삭제</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="user-btn">
+                    <a th:href="@{/admin/userAdminPage}"><button>회원목록</button></a>
+                </div>
+            </div>
+        </div>
+        <script>
+            function viewUser(mUserNum) {
+                    location.href = '/admin/viewUser?id='+mUserNum;
+                }
+                function deleteUser(mUserNum) {
+                    if( confirm('회원정보를 삭제하시겠습니까?') ) {
+                        location.href = '/admin/deleteUser?id='+mUserNum;
+                    }
+                }
+
+        function searchList() {
+            let searchType = document.querySelector("#searchType");
+            let words = document.querySelector("input[name=words]");
+
+        if( searchType.options[searchType.selectedIndex].value == "" ) {
+            alert("검색 타입을 선택하세요");
+            searchType.focus();
+            return false;
+        }
+
+        if( words.value == "" ) {
+            alert("검색어를 입력하세요");
+            words.focus();
+            return false;
+        }
+
+    }
+
+        </script>
+</body>
+</html>
