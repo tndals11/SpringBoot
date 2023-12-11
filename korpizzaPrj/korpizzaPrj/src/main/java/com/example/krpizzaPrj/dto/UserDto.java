@@ -6,8 +6,8 @@ public class UserDto {
     private String userEmail;
     private String userName;
     private String userPasswd;
-    private String regDate;
-    private String endDate;
+    private String userRegDate;
+    private String userEndDate;
 
     public int getUserNum() {
         return userNum;
@@ -49,20 +49,20 @@ public class UserDto {
         this.userPasswd = userPasswd;
     }
 
-    public String getRegDate() {
-        return regDate;
+    public String getUserRegDate() {
+        return userRegDate;
     }
 
-    public void setRegDate(String regDate) {
-        this.regDate = regDate;
+    public void setUserRegDate(String userRegDate) {
+        this.userRegDate = userRegDate;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getUserEndDate() {
+        return userEndDate;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setUserEndDate(String userEndDate) {
+        this.userEndDate = userEndDate;
     }
 
     @Override
@@ -73,8 +73,8 @@ public class UserDto {
                 ", userEmail='" + userEmail + '\'' +
                 ", userName='" + userName + '\'' +
                 ", userPasswd='" + userPasswd + '\'' +
-                ", regDate='" + regDate + '\'' +
-                ", endDate='" + endDate + '\'' +
+                ", userRegDate='" + userRegDate + '\'' +
+                ", userEndDate='" + userEndDate + '\'' +
                 '}';
     }
 }
