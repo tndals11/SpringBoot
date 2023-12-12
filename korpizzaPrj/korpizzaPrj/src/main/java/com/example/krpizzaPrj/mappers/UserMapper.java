@@ -30,7 +30,7 @@ public interface UserMapper {
 
         // 비밀번호 찾기
         // #userPasswd# userPasswd가 없어서 오류 계속 발생!! mybatis 이름 변환이 달라서 그런것 같다
-        @Select("SELECT users.user_pw as userPasswd FROM users WHERE user_id = #{userId} AND user_email = #{userEmail}")
+        @Select("SELECT users.user_passwd  FROM users WHERE user_id = #{userId} AND user_email = #{userEmail}")
         public UserDto checkFindPw( UserDto userDto);
 
         // 로그인
