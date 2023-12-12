@@ -95,6 +95,14 @@
   color: #e7e7e7;
   margin: 0 32px;
 }
+.text-align {
+    text-align: center;
+    color: red;
+}
+    .text-align p {
+    text-align: center;
+    color: red;
+}
     </style>
 </head>
 <body>
@@ -109,7 +117,7 @@
             <h1>비밀번호 찾기</h1>
         </div>
         <div class="main-wrap">
-            <form action="#"  autocapitalize="off">
+            <form action="/common/findPw" method="post" onsubmit="return frmCheck()">
                 <div class="int-area">
                     <label>아이디</label>
                     <input type="text"  id="userId" name="userId"  placeholder="아이디를 입력해주세요">
@@ -117,9 +125,11 @@
                 <div class="int-area">
                     <label>이메일</label>
                     <input type="email" id="userEmail" name="userEmail"  placeholder="이메일을 입력해주세요.">
+                    <p class="text-align" style="color:red; font-size:16px"><span th:text="${msg}"></span></p>
                 </div>
                 <div class="btn-area">
-                    <button type="submit" id="btn">비밀번호 찾기</button>
+                    <button type="submit" id="btn" onsubmit="return frmCheck()">비밀번호 찾기</button>
+
                 </div>
             </form>
         </div>
@@ -131,13 +141,12 @@
 <!-- footer -->
 
 <script>
-    let userId = document.querySelector("#userId");
-    let userEmail = document.querySelector("#userEmail");
-    let checkID = RegExp(/^[a-z0-9]{6,20}$/);
-    let checkEmail = RegExp(/^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/);
+    function frmCheck() {
+        let userId = document.querySelector("#userId");
+        let userEmail = document.querySelector("#userEmail");
+        let checkID = RegExp(/^[a-z0-9]{6,20}$/);
+        let checkEmail = RegExp(/^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/);
 
-       $('#btn').click(function(e){
-           e.preventDefault();
 
            if($("#userId").val() == "" || $("#userEmail").val() == ""){
                alert("공백을 입력하세요.");
@@ -147,34 +156,10 @@
                return false;
            }
 
+    }
 
-             // obj error (object, Object) ==> 오류
-             // JSON.stringify => 문자열로 변환후 값을 보내줘야한다
-             // contentType : "application/json",
 
-             let obj = {
-                 userId: userId.value,
-                 userEmail: userEmail.value,
-             };
 
-            $.ajax({
-                 type: "post",
-                 url: "/common/checkFindPw",
-                 contentType : "application/json;charset=UTF-8",
-                 data : JSON.stringify(obj),
-                 success: function(result) {
-                 if ( result.msg == "success" ) {
-                    location.href = "/common/viewFindPw?userPw="+result.userPw;
-                 } else {
-                     alert("아이디와 이메일을 다시 확인해주세요");
-                     location.href = "/common/findPw";
-                     $("#userId").focus();
-                      return false;
-                 }
-              }
-            });
-
-       });
 
 </script>
 

@@ -21,4 +21,8 @@ public interface AdminMapper {
 
     @Delete("DELETE FROM users WHERE user_num = #{userNum}")
     void deleteUser( int id );
+
+
+    @Select("SELECT COUNT(*) FROM users")
+    int totalCount();
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -103,7 +104,7 @@ public class UserController {
         map.put("msg", msg); // --> 메세지를 보낼려고 쓴것
         return map;
     }
-    
+
     // 아이디 찾기 후 뷰단에 보여주는 페이지
     @GetMapping("/user/viewFindId")
     public String viewFindId(@RequestParam String userId, Model model) {
@@ -119,27 +120,23 @@ public class UserController {
     }
 
     // 비밀번호 찾기 주소 값 받기
-    @PostMapping("/common/checkFindPw")
-    @ResponseBody
-    public Map<String, Object> checkFindPw(@RequestBody UserDto userDto) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
+    @PostMapping("/common/findPw")
+    public String checkFindPw(@ModelAttribute UserDto userDto, Model model, RedirectAttributes ra) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
         UserDto res = userMapper.checkFindPw(userDto);
-        Map<String, Object> map = new HashMap<>();
-        String msg = "";
         if ( res != null ) {
-            msg = "success";
-            map.put("userPw", res.getUserPasswd() ); // url 담을려고 변수명 userId에 getUserId를 받아옴
+           String userPasswd = res.getUserPasswd();
+            ra.addFlashAttribute("msg",userPasswd );
+            return "redirect:/common/viewFindPw";
         } else {
-            msg = "fail";
+            ra.addFlashAttribute("msg", "아이디와 이메일을 다시 확인해주세요");
+            return "redirect:/common/findPw";
         }
-        map.put("msg", msg); // --> 메세지를 보낼려고 쓴것
-        return map;
     }
-    
+
     // 비밀번호 찾기 후 뷰단에 보여주는 페이지 
     @GetMapping("/common/viewFindPw")
-    public String viewFindPw(@RequestParam String userPw, Model model) {
-        System.out.println("userPw : " + userPw);
-        model.addAttribute("userPw", userPw);
+    public String viewFindPw( ) {
+
         return "common/viewFindPw";
     }
 
