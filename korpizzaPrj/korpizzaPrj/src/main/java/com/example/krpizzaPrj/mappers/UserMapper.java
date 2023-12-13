@@ -34,7 +34,7 @@ public interface UserMapper {
         public UserDto checkFindPw( UserDto userDto);
 
         // 로그인
-        @Select("SELECT user_id as userId, user_pw as userPasswd FROM users WHERE  user_id = #{userId} AND user_pw = #{userPasswd}")
+        @Select("SELECT * FROM users  WHERE user_id = #{userId} AND user_passwd = #{userPasswd}")
         public UserDto checkLogin(UserDto userDto);
 
     }

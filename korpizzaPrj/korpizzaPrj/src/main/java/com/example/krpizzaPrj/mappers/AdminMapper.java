@@ -10,8 +10,8 @@ import java.util.List;
 
 @Mapper
 public interface AdminMapper {
-    @Select("SELECT * FROM users ${queryString} ORDER BY user_num DESC")
-    List<UserDto> getUserAdminPage(String queryString);
+    @Select("SELECT * FROM users ${queryString} ORDER BY user_num DESC LIMIT #{startNum}, #{offset}")
+    List<UserDto> getUserAdminPage(String queryString, int startNum, int offset);
 
     @Select("SELECT COUNT(*) FROM users ${queryString}")
     int getUserAdminCount(String queryString);

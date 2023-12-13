@@ -246,9 +246,8 @@
       color: white;
       cursor: pointer;
     }
-        /* .user-list tr:nth-child(even) {
-          background-color: #f6f6f6;
-        } */
+    .bottom-center { text-align: center; }
+
 
     </style>
 </head>
@@ -354,16 +353,43 @@
                             <td>[[${m.userRegDate}]]</td>
                             <td>
                                 <button class="blue" th:onclick="viewUser([[${m.userNum}]])">보기</button>
-                                <button class="black" th:onclick="updateUser()">수정</button>
                                 <button class="tomato" th:onclick="deleteUser([[${m.userNum}]])">삭제</button>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="user-btn">
-                    <a th:href="@{/admin/userAdminPage}"><button>회원목록</button></a>
-                </div>
+            </div>
+            <div class="bottom-center">
+                <a href="#" th:if="${page.page <= 1}"></a>
+
+                <a th:href="@{/admin/userAdminPage?(page=${page.page-1})}" th:unless="${page.page <= 1}">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+
+                <!-- page number -->
+                <!-- #numbers.sequence() 숫자를 순차적으로 생성하고 +1씩 출력-->
+                <!-- i => 페이지번호(id) -->
+                <a th:each="i : ${ #numbers.sequence(page.startPage, page.endPage, 1) }" th:href="@{/admin/userAdminPage?(page=${i})}">
+                    <th:block th:if="${page.page eq i}">
+                        <span style="color:#f00; ">
+                            <strong>[[${i}]]</strong>
+                        </span>
+                    </th:block>
+                    <th:block th:unless="${page.page eq i}">
+                        <span>
+                            [[${i}]]
+                        </span>
+                    </th:block>
+                </a>
+
+
+                <a href="#" th:if="${page.page >= page.totalPage}" ></a>
+
+                <a th:href="@{/admin/userAdminPage?(page=${page.page + 1})}" th:unless="${page.page >= page.totalPage}">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <!----------------------------------------------------------------------------------------------------->
             </div>
         </div>
         <script>

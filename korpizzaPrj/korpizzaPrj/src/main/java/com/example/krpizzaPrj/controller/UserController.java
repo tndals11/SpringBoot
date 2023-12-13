@@ -3,6 +3,7 @@ package com.example.krpizzaPrj.controller;
 
 import com.example.krpizzaPrj.dto.UserDto;
 import com.example.krpizzaPrj.mappers.UserMapper;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,7 @@ public class UserController {
         if( userDto != null ) {
             userMapper.setRegister(userDto);
             map.put("msg", "회원가입이 완료되었습니다.");
+
         }
         return map;
     }
@@ -61,8 +63,7 @@ public class UserController {
         return "common/findID";
     }
 
-
-    // 로그인 페이지 
+    // 로그인 페이지
     @GetMapping("/common/login")
     public String getLogin() {
 
@@ -72,13 +73,13 @@ public class UserController {
     // 로그인 페이지 값을 받아와 처리 
     @PostMapping("/common/checkLogin")
     @ResponseBody
-    public String checkLogin(@RequestBody UserDto userDto) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
-
-        UserDto checkLogin = userMapper.checkLogin(userDto);
-        System.out.println(userDto);
-
+    public String checkLogin(@RequestBody UserDto userDto, HttpSession session) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
+        UserDto userdto = userMapper.checkLogin(userDto);
         String msg = "";
-        if( checkLogin != null ) {
+        if( userdto != null ) {
+            session.setAttribute("user", userdto);
+            System.out.println(userdto);
+            session.setMaxInactiveInterval(60*10);
             msg = "success";
         } else {
             msg = "fail";
@@ -135,8 +136,9 @@ public class UserController {
 
     // 비밀번호 찾기 후 뷰단에 보여주는 페이지 
     @GetMapping("/common/viewFindPw")
-    public String viewFindPw( ) {
+    public String viewFindPw(HttpSession session) {
 
+        UserDto user = (UserDto) session.getAttribute("user");
         return "common/viewFindPw";
     }
 
@@ -156,18 +158,21 @@ public class UserController {
 
             return "common/map";
         }
-        @GetMapping("/common/eventPage")
-        public String getEventPage() {
+        @GetMapping("/common/eventPage") public String getEventPage() {
             return "common/eventPage";
         }
-        @GetMapping("/common/endEventPage")
-        public String getEndEventPage() {
+        @GetMapping("/common/endEventPage") public String getEndEventPage() {
             return "common/endEventPage";
         }
-        @GetMapping("/common/original")
-        public String getOriginal() {
+        @GetMapping("/common/original") public String getOriginal() {
             return "common/original";
         }
 
+    @GetMapping("/user/userinfo") public String getUserInfo() {
 
+        return "user/userinfo";
+    }
+    @GetMapping("/user/updatePasswd") public String getUserUpdatePasswd() {
+        return "/user/updatePasswd";
+    }
 }

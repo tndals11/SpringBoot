@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <style>
+      /* 메인 영역 */
+      .main-container {
+        width: 1280px;
+        display: flex;
+        align-items: center;
+        margin: 0 auto;
+        height: 970px;
+      }
+      .content-wrap {
+        width: 100%;
+      }
+      .content1 {
+        width: 1280px;
+        padding: 10px 15px;
+        margin: 0 auto;
+        text-align: center;
+        margin-bottom: 100px;
+      }
+      .content1 h1 {
+        font-size: 34px;
+      }
+      .content1 p {
+        font-size: 30px;
+        margin-top: 50px
+      }
+      .content1 p span {
+        color: #cf152d;
+        position: relative;
+      }
+      .content1 p span::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 1px;
+        position: absolute;
+        top: 40px;
+        left: 0px;
+        background-color: #cf152d;
+      }
+      .content2 {
+        width: 300px;
+        height: 150px;
+        font-size: 25px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .content3 {
+        width: 1280px;
+        height: 230px;
+        box-shadow:0 5px 20px rgba(0, 0, 0, 0.2);
+        border-radius: 30px;
+
+      }
+      .content3 ul {
+        display: flex;
+        padding: 15px 0px;
+        border-radius: 15px;
+      }
+      .content3 ul li {
+        width: 256px;
+        height: 200px;
+        padding: 20px 20px;
+        font-size: 20px;
+        font-weight: bold;
+        border-right: 1px solid #e7e7e7;
+        text-align: center;
+        position: relative;
+      }
+      /* 밑줄 가상요소 */
+      .content3 ul li::after {
+        content: '';
+        display: block;
+        width: 50%;
+        height: 1px;
+        position: absolute;
+        top: 53px;
+        left: 64px;
+        background-color: #cf152d;
+
+      }
+      .box {
+        display: flex;
+        flex-direction: column;
+      }
+      .box span {
+        margin-bottom: 25px;
+      }
+      .box img {
+        object-fit: cover;
+        margin-left: 50%;
+        transform: translate(-50%);
+        width: 64px;
+      }
+      .box button {
+        margin-top: 25px;
+        width: 50%;
+        margin-left: 50%;
+        transform: translate(-50%);
+        background-color: #cf152d;
+        color: white;
+        padding: 4px 0;
+        border: 0;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        font-family: 'Noto Sans KR', sans-serif;
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .box button:hover {
+        opacity: 0.8;
+      }
+
+
+    </style>
+</head>
+<body>
+<!--header-->
+<th:block th:replace="~{fragment/afterLoginHeader::afterHeaderFragment}"></th:block>
+<!--header-->
+
+<!-- 메인 영역 -->
+<main>
+    <div class="main-container">
+        <div class="content-wrap">
+            <div class="content1">
+                <h1>마이페이지</h1>
+                <p><strong th:text="${session.user.userName}"></strong>님 안녕하세요.</p>
+            </div>
+            <div class="content3">
+                <ul>
+                    <li class="box">
+                        <span>주문내역</span>
+                            <img  src="/images/user_imgs/icon.png" alt="">
+                        <a href=""><button>주문내역</button></a>
+                    </li>
+                    <li class="box">
+                        <span>1:1문의</span>
+                            <img  src="/images/user_imgs/icon2.png" alt="">
+                        <a href=""><button>1:1문의</button> </a>
+                    </li>
+                    <li class="box">
+                        <span>내 정보 수정</span>
+                            <img  src="/images/user_imgs/icon3.png" alt="">
+                        <a href=""><button>내 정보 수정</button></a>
+                    </li>
+                    <li class="box">
+                        <span>비밀번호 변경</span>
+                            <img  src="/images/user_imgs/icon4.png" alt="">
+                        <a href="/user/updatePasswd"><button>비밀번호 변경</button></a>
+                    </li>
+                    <li class="box">
+                        <span>로그아웃</span>
+                            <img src="/images/user_imgs/icon5.png" alt="">
+                        <a href=""><button>로그아웃</button></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </div>
+</main>
+
+<!-- footer -->
+<th:block th:replace="~{fragment/footer::footerFragment}"></th:block>
+<!-- footer -->
+
+</body>
+</html>
