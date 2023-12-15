@@ -37,4 +37,8 @@ public interface UserMapper {
         @Select("SELECT * FROM users  WHERE user_id = #{userId} AND user_passwd = #{userPasswd}")
         public UserDto checkLogin(UserDto userDto);
 
+
+        @Select("SELECT COUNT(*) FROM users  WHERE user_email = #{user_Email} AND user_num = #{userNum}")
+        public int setGoupDatePage(String userEmail, int userNum);
+
     }

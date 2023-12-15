@@ -167,6 +167,7 @@ body {
         let userId = document.querySelector("#userId");
 
      function checkForm() {
+
       // 아이디 유효성 체크
       $("#userId").blur(function (){
                 if($("#userId").val() == "" ){
@@ -197,6 +198,7 @@ body {
                     }
               }
             });
+
             // 이메일 유효성 체크
             $("#userEmail").blur(function(){
                 if($("#userEmail").val() == "" ){
@@ -226,6 +228,7 @@ body {
                     }
                 }
             });
+
             $("#userName").blur(function(){
                 if($("#userName").val() == "" ){
                     $("#name_check").text("이름을 입력해주세요.").css("color", "red");
@@ -274,6 +277,8 @@ body {
             });
    }
    checkForm();
+
+
     // button 클릭시
         $('#btn').click(function(){
             if($("#userId").val() == "" || $("#userPasswd").val() == "" || $("#userName").val() == "" ||  $("#userEmail").val() == "" ){
