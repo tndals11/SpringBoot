@@ -3,7 +3,9 @@ package com.example.krpizzaPrj.controller;
 
 import com.example.krpizzaPrj.dto.UserDto;
 import com.example.krpizzaPrj.mappers.UserMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,13 +30,11 @@ public class UserController {
     // 회원가입 페이지
     @PostMapping("/common/register")
     @ResponseBody
-    public Map<String, Object> setRegister(@ModelAttribute UserDto userDto) {
-        System.out.println(userDto);
+    public Map<String, Object> setRegister(@ModelAttribute UserDto userDto, HttpSession session) {
         Map<String, Object> map = new HashMap<>();
-        if( userDto != null ) {
-            userMapper.setRegister(userDto);
+        if (userDto != null) {
+            UserDto user = (UserDto) session.getAttribute("user");
             map.put("msg", "회원가입이 완료되었습니다.");
-
         }
         return map;
     }
@@ -73,18 +73,18 @@ public class UserController {
     // 로그인 페이지 값을 받아와 처리 
     @PostMapping("/common/checkLogin")
     @ResponseBody
-    public String checkLogin(@RequestBody UserDto userDto, HttpSession session) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
+    public String checkLogin(@RequestBody UserDto userDto, HttpServletRequest request) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
         UserDto userdto = userMapper.checkLogin(userDto);
         String msg = "";
-        if( userdto != null ) {
+        if (userdto != null) {
+            HttpSession session = request.getSession();
             session.setAttribute("user", userdto);
-            System.out.println(userdto);
-            session.setMaxInactiveInterval(60*10);
+            session.setAttribute("userNum", userdto.getUserNum());
+            session.setMaxInactiveInterval(60 * 10);
             msg = "success";
         } else {
             msg = "fail";
         }
-        System.out.println(msg);
         return msg;
     }
     
@@ -141,6 +141,26 @@ public class UserController {
         UserDto user = (UserDto) session.getAttribute("user");
         return "common/viewFindPw";
     }
+
+    @GetMapping("/user/goupDatePage")
+    public String goupDatePage() {
+
+        return "user/goupDatePage";
+    }
+    @PostMapping("/user/goupDatePage")
+    @ResponseBody
+    public String setGoupDatePage(@RequestParam String userEmail, Model model) {
+
+        return "";
+    }
+
+
+    @GetMapping("/user/updateUserInfo")
+    public String updateUserInfoPage() {
+
+        return "user/updateUserInfo";
+    }
+
 
     @GetMapping("/common/mainPage")
     public String getMainPage() {

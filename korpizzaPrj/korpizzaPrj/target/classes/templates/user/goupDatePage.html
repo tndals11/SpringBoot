@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀번호찾기 페이지</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<style>
+    /*---------main영역------------*/
+    .main-title {
+      padding-top: 200px;
+      text-align: center;
+      }
+    .container {
+      width: 1280px;
+      height: 800px;
+      display: flex;
+      margin: 0 auto;
+      flex-direction: column;
+      align-items: center;
+    }
+    .main-wrap {
+      width: 600px;
+      height: 600px;
+      margin-top: 50px;
+    }
+    .main-wrap h1{
+      text-align: center;
+      font-size: 34px;
+      margin-bottom: 50px;
+    }
+    .main-wrap p {
+      margin-top: 30px;
+      margin-bottom: 70px;
+      font-size: 24px;
+      font-weight: lighter;
+      color:  #555;
+    }
+    .int-area {
+      margin-bottom: 25px;
+    }
+    .int-area label {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .int-area input {
+      padding: 10px 10px 5px;
+      width: 600px;
+      border: 0;
+      background-color: transparent;
+      border-bottom: 1px solid #e7e7e7;
+      font-size: 16px;
+      outline: none;
+      color: black;
+      margin-bottom: 20px;
+    }
+    .btn-area #btn {
+      font-family: 'Noto Sans KR', sans-serif;
+      width: 100%;
+      height: 80px;
+      background-color: #cf152d;
+      color: white;
+      font-size: 1.1rem;
+      border: 0;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 1px 1px 1px #333;
+      letter-spacing: 1px;
+      margin-top: 5px;
+      box-shadow: 2px 2px 2px #888;
+      font-weight: bold;
+    }
+    /* 버튼에 마우스를 올렸을시 나타나는 */
+    .btn-area #btn:hover {
+      opacity: 0.9;
+      color: #e7e7e7;
+    }
+    .caption-wrap {
+      width: 100%;
+      margin-top: 25px;
+    }
+    .caption {
+      width: 100%;
+      height: 40px;
+      display: flex;
+    }
+    .caption ul {
+      display: flex;
+      justify-content: center;
+      margin: 0 63px;
+      font-size: 15px;
+    }
+    .caption span {
+      color: #e7e7e7;
+      margin: 0 32px;
+    }
+
+</style>
+<body>
+<!--header-->
+<th:block th:replace="~{fragment/afterLoginHeader::afterHeaderFragment}"></th:block>
+<!--header-->
+
+<!-- main 영역 -->
+<main>
+    <div class="container">
+        <div class="main-title">
+            <h1>내 정보 수정</h1>
+        </div>
+        <div class="main-wrap">
+            <p>회원님의 정보를 수정하기 위해 이메일을 재확인합니다.</p>
+            <form action="#" method="post" autocomplete="off">
+                <div class="int-area">
+                    <label >이메일 확인</label>
+                    <input type="email" id="userEmail" name="userEmail" class="userEmail" placeholder="이메일을 입력해주세요." required>
+                    <div id="email_check"></div>
+                </div>
+                <div class="btn-area">
+                    <button type="button" id="btn">확인</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- footer -->
+<th:block th:replace="~{fragment/footer::footerFragment}"></th:block>
+<!-- footer -->
+
+<script>
+    $(function () {
+         let checkEmail = RegExp(/^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/);
+         let checkRecommendId = RegExp(/^[a-z0-9]{6,20}$/);
+         let msg = document.querySelector(".msg");
+         let userId = document.querySelector("#userId");
+
+      function checkForm() {
+
+             // 이메일 유효성 체크
+             $("#userEmail").blur(function(){
+                 if($("#userEmail").val() == "" ){
+                     $("#email_check").text("이메일을 입력해주세요.").css("color", "red");
+                     $("#userEmail").focus();
+                     return false;
+                 }else{
+                     if(!checkEmail.test($("#userEmail").val())) {
+                         $("#email_check").text("이메일 형식에 맞춰 입력해주세요. ex) ***@naver.com").css("color", "red");
+                         //$("#userEmail").focus();
+                         return false;
+                     }
+                 }
+             });
+    }
+    checkForm();
+
+     // button 클릭시
+         $('#btn').click(function(){
+             if($("#userEmail").val() == "" ){
+                 alert("공백을 입력하세요.");
+                 location.href="/common/register";
+                 return false;
+             } else if(!checkEmail.test($("#userEmail").val())) {
+                 alert("형식에 맞춰 작성해주세요.")
+                 location.href="/common/register";
+                 return false;
+             }
+
+            $.ajax({
+                 type: "post",
+                 url: "/user/goupDatePage",
+                 data: {userEmail: userEmail.value},
+                 dataType: "json",
+                 success: function(res) {
+                     if ( res.success > 0  ) {
+                        location.href = "user/updateUserInfo";
+                     } else {
+                        $("#email_check").html("이메일을 다시 확인해주세요").css("color", "green");
+                     }
+                         }
+                 });
+         });
+
+       });
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
