@@ -3,19 +3,16 @@ package com.example.krpizzaPrj.mappers;
 
 
 import com.example.krpizzaPrj.dto.UserDto;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 
 @Mapper
 public interface UserMapper {
         
         // 회원가입
-        @Insert("INSERT INTO users VALUES(NULL, #{userId}, #{userPasswd}, #{userEmail}, #{userName}, NOW(), NOW())")
+        @Insert("INSERT INTO users VALUES(NULL, #{userId}, #{userPasswd}, #{userEmail}, #{userName}, NOW(), NOW(), '00')")
         public void setRegister(UserDto userDto);
-        
+
         // 아이디 중복 체크
         @Select("SELECT COUNT(*) FROM users WHERE user_id = #{userId}")
         public int getCheckUserId(String userId);
@@ -38,7 +35,12 @@ public interface UserMapper {
         public UserDto checkLogin(UserDto userDto);
 
 
-        @Select("SELECT COUNT(*) FROM users  WHERE user_email = #{user_Email} AND user_num = #{userNum}")
+        @Select("SELECT COUNT(*) FROM users  WHERE user_email = #{userEmail} AND user_num = #{userNum}")
         public int setGoupDatePage(String userEmail, int userNum);
 
+        @Update("UPDATE users SET user_name = #{userName} WHERE user_num = #{userNum}")
+        public void setupdateUserInfo(String userName, int userNum);
+
+        @Update("UPDATE users SET user_st = '90', user_enddate = now() WHERE user_num = #{userNum}")
+        public void deleteUserInfo(int userNum);
     }

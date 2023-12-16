@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" th:href="@{/css/reset.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
@@ -122,7 +123,7 @@
         letter-spacing: 1px;
         box-shadow: 2px 2px 2px #888;
         font-weight: bold;
-        margin-top: 20px;
+        margin-top: 80px;
       }
       .btn-box button:hover {
         opacity: 0.9;
@@ -160,54 +161,105 @@
             <div class="content1">
             </div>
             <div class="content2">
-                <form action="" method="post">
-                    <div class="content2-wrap">
-                        <div class="item">
-                            <p>이메일</p>
-                        </div>
-                        <div class="item">
-                            <input type="email" name="useremail" id="useremail">
-                        </div>
-                        <div class="item">
-                            <p>이름</p>
-                        </div>
-                        <div class="item">
-                            <input type="name" name="username" id="username">
-                        </div>
-                        <div class="item">
-                            <p>아이디</p>
-                        </div>
-                        <div class="item">
-                            <input type="text" name="userid" id="userid">
-                        </div>
-                        <div class="item">
-                            <p>비밀번호</p>
-                        </div>
-                        <div class="item">
-                            <a href="./passwdChang.html"><input class="style-btn" type="button" value="비밀번호 재설정"></a>
-                        </div>
-                        <div class="item">
-                            <p>회원탈퇴</p>
-                        </div>
-                        <div class="item">
-                            <input class="style-btn" name="btn" type="submit" value="탈퇴하기">
-                        </div>
+                <div class="content2-wrap">
+                    <div class="item">
+                        <p>이메일</p>
                     </div>
-                    <div class="box-container">
-                        <div class="btn-box">
-                            <button  type="submit" id="btn">회원정보수정</button>
-                        </div>
+                    <div class="item">
+                        <input type="email" name="useremail" id="useremail" th:value="${userEmail}" readonly>
                     </div>
-                </form>
+                    <div class="item">
+                        <p>이름</p>
+                    </div>
+                    <div class="item">
+                        <input type="name" name="userName" id="userName" th:value="${userName}">
+                    </div>
+                    <div class="item">
+                        <p>아이디</p>
+                    </div>
+                    <div class="item">
+                        <input type="text" name="userId" id="userId" th:value="${userId}" readonly>
+                    </div>
+                    <div class="item">
+                        <p>비밀번호</p>
+                    </div>
+                    <div class="item">
+                        <a href="/user/updatePasswd"><input class="style-btn" type="button" value="비밀번호 재설정"></a>
+                    </div>
+                    <div class="item">
+                        <p>회원탈퇴</p>
+                    </div>
+                    <div class="item">
+                            <input class="style-btn" id="btn1" type="button" value="탈퇴하기">
+                    </div>
+                </div>
+                <div class="box-container">
+                    <div class="btn-box">
+                        <button type="button" id="btn2"> 회원정보수정 </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </main>
 
 <!-- footer -->
 <th:block th:replace="~{fragment/footer::footerFragment}"></th:block>
 <!-- footer -->
+<script>
+    $( function () {
+        let checkName = RegExp(/^[가-힣]|[A-Z]|[a-z]$/);
+        let userName = document.querySelector("#userName");
+        let btn1 = document.querySelector("#btn1");
+        let btn2 = document.querySelector("#btn2");
 
+        btn1.addEventListener('click', () => {
+             if ( confirm("정말 회원탈퇴를 하시겠습니까??") ) {
+                    $.ajax({
+                 type: "get",
+                 url: "/user/deleteUserInfo",
+                 dataType: "json",
+                 success: function(res) {
+                        if( res.msg == "success") {
+                            alert("삭제하였습니다.");
+                        }
+                         }
+                 });
+             }
+        });
+
+        btn2.addEventListener('click', () => {
+            if($("#userName").val() == "" ){
+                   alert("이름을 다시 입력해주세요");
+                   $("#userName").focus();
+                   return false;
+               }else{
+                   if(!checkName.test($("#userName").val())) {
+                       alert("이름 형식에 맞게 입력해주세요");
+                       //$("#userEmail").focus();
+                       return false;
+                   }
+                   $.ajax({
+                 type: "post",
+                 url: "/user/updateUserInfo",
+                 data: {userName: userName.value},
+                 dataType: "json",
+                 success: function(res) {
+                     if ( res.msg ==  "success"  ) {
+                        location.href = "/common/login";
+                     } else {
+                        alert("동일한 이름입니다\n다시시도해주세요.");
+                     }
+                         }
+                 });
+               }
+        });
+
+
+
+    });
+
+
+</script>
 </body>
 </html>

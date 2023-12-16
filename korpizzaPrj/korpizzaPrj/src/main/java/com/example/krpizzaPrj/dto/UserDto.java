@@ -8,6 +8,8 @@ public class UserDto {
     private String userPasswd;
     private String userRegDate;
     private String userEndDate;
+    private String userSt;
+
 
     public int getUserNum() {
         return userNum;
@@ -65,6 +67,14 @@ public class UserDto {
         this.userEndDate = userEndDate;
     }
 
+    public String getUserSt() {
+        return userSt;
+    }
+
+    public void setUserSt(String userSt) {
+        this.userSt = userSt;
+    }
+
     @Override
     public String toString() {
         return "UserDto{" +
@@ -75,6 +85,7 @@ public class UserDto {
                 ", userPasswd='" + userPasswd + '\'' +
                 ", userRegDate='" + userRegDate + '\'' +
                 ", userEndDate='" + userEndDate + '\'' +
+                ", userSt='" + userSt + '\'' +
                 '}';
     }
 }

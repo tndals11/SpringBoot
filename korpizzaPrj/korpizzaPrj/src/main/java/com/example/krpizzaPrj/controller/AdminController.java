@@ -28,8 +28,11 @@ public class AdminController {
         }else{
             queryString = "";
         }
+
         PageDto pageDto = new PageDto();
-        int totalCount = adminMapper.totalCount();
+        // "SELECT COUNT(*) FROM users ${queryString}"
+        // queryString => 값이 출력된다
+        int totalCount = adminMapper.getUserAdminCount(queryString);
         System.out.println("======= totalCount : " + totalCount);
         // Math.ceil() 소수점을 강제로 1로 만든다
         int totalPage = (int)Math.ceil((double) totalCount / pageDto.getPageCount());
@@ -41,7 +44,6 @@ public class AdminController {
         if ( endPage > totalPage ) {
             endPage = totalPage;
         }
-
 
         // dto에 값을 보내주는
         pageDto.setPage(page);
