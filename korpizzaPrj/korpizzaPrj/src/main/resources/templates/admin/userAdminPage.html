@@ -342,6 +342,8 @@
                             <th>회원아이디</th>
                             <th>이름</th>
                             <th>가입일</th>
+                            <th>탈퇴일</th>
+                            <th>회원상태</th>
                             <th>비고</th>
                         </tr>
                         </thead>
@@ -351,6 +353,10 @@
                             <td>[[${m.userId}]]</td>
                             <td>[[${m.userName}]]</td>
                             <td>[[${m.userRegDate}]]</td>
+                            <td th:if="${m.userSt} == '90'" >[[${m.userEndDate}]]</td>
+                            <td th:unless="${m.userSt} == '90'" >-</td>
+                            <td th:if="${m.userSt} == '00'" style="color: green">등록</td>
+                            <td th:unless="${m.userSt} == '00'" style="color: red">탈퇴</td>
                             <td>
                                 <button class="blue" th:onclick="viewUser([[${m.userNum}]])">보기</button>
                                 <button class="tomato" th:onclick="deleteUser([[${m.userNum}]])">삭제</button>
@@ -420,6 +426,6 @@
 
     }
 
-        </script>
+</script>
 </body>
 </html>

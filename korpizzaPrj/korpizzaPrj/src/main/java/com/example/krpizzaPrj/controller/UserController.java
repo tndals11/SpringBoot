@@ -3,6 +3,7 @@ package com.example.krpizzaPrj.controller;
 
 import com.example.krpizzaPrj.dto.UserDto;
 import com.example.krpizzaPrj.mappers.UserMapper;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.User;
@@ -30,10 +31,10 @@ public class UserController {
     // 회원가입 페이지
     @PostMapping("/common/register")
     @ResponseBody
-    public Map<String, Object> setRegister(@ModelAttribute UserDto userDto, HttpSession session) {
+    public Map<String, Object> setRegister(@ModelAttribute UserDto userDto) {
         Map<String, Object> map = new HashMap<>();
         if (userDto != null) {
-            UserDto user = (UserDto) session.getAttribute("user");
+            userMapper.setRegister(userDto);
             map.put("msg", "회원가입이 완료되었습니다.");
         }
         return map;
@@ -76,11 +77,9 @@ public class UserController {
     public String checkLogin(@RequestBody UserDto userDto, HttpServletRequest request) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
         UserDto userdto = userMapper.checkLogin(userDto);
         String msg = "";
-        if (userdto != null) {
+        if (userdto != null ) {
             HttpSession session = request.getSession();
             session.setAttribute("user", userdto);
-            session.setAttribute("userNum", userdto.getUserNum());
-            session.setMaxInactiveInterval(60 * 10);
             msg = "success";
         } else {
             msg = "fail";
@@ -149,16 +148,64 @@ public class UserController {
     }
     @PostMapping("/user/goupDatePage")
     @ResponseBody
-    public String setGoupDatePage(@RequestParam String userEmail, Model model) {
+    public Map<String, Object> setGoupDatePage(@RequestParam String userEmail, HttpSession session) {
+        Map<String, Object> map = new HashMap<>();
+        UserDto dto = (UserDto) session.getAttribute("user");
 
-        return "";
+        int userName = dto.getUserNum();
+        int result =  userMapper.setGoupDatePage( userEmail , userName);
+
+        if ( result > 0 ) {
+            map.put("msg", "success");
+        } else {
+            map.put("msg", "fail");
+        }
+        return map;
     }
 
 
     @GetMapping("/user/updateUserInfo")
-    public String updateUserInfoPage() {
+    public String getupdateUserInfoPage(Model model, HttpSession session) {
+        UserDto dto = (UserDto) session.getAttribute("user");
+        model.addAttribute("userId",dto.getUserId());
+        model.addAttribute("userName",dto.getUserName());
+        model.addAttribute("userEmail", dto.getUserEmail());
+
+
 
         return "user/updateUserInfo";
+    }
+
+    @PostMapping("/user/updateUserInfo")
+    @ResponseBody
+    public Map <String, Object> setupdateUserInfoPage(@RequestParam String userName, HttpSession session) {
+        UserDto dto = (UserDto) session.getAttribute("user");
+        System.out.println(dto);
+        System.out.println(userName);
+        int userNum = dto.getUserNum();
+        Map <String, Object> map = new HashMap<>();
+        if ( userName.equals(dto.getUserName())) {
+            map.put("msg", "fail");
+        } else {
+            userMapper.setupdateUserInfo(userName, userNum);
+            map.put("msg", "success");
+        }
+        return map;
+    }
+    @GetMapping("/user/deleteUserInfo")
+    public String deleteUserInfo(HttpSession session, RedirectAttributes redirectAttributes) {
+        UserDto dto = (UserDto) session.getAttribute("user");
+        int userNum = dto.getUserNum();
+        String userSt = dto.getUserSt();
+        userMapper.deleteUserInfo(userNum);
+
+        if ( userSt.equals("90") ) {
+            redirectAttributes.addAttribute("msg", "fail");
+        } else {
+            redirectAttributes.addAttribute("msg", "success");
+        }
+
+        return "redirect:/user/updateUserInfo";
     }
 
 
@@ -168,8 +215,7 @@ public class UserController {
         return "common/mainPage";
     }
     @GetMapping("/user/afterLogin")
-    public String getAfterLogin() {
-
+    public String getAfterLogin(Model model) {
         return "user/afterLogin";
     }
 

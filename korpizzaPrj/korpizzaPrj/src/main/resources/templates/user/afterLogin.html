@@ -29,7 +29,7 @@
             <div class="content1-wrap">
                 <div class="content1">
                     <div class="content1-title">
-                        <p><strong><a th:href="@{/user/userinfo}"><u>[[${session.user.userName}]]</u></a></strong>님 환영합니다. <br>많은 이벤트 혜택을 받아가세요!</p>
+                        <p><strong><a th:href="@{/user/userinfo}"><u th:text="${session.user.userName}"></u></a></strong>님 환영합니다. <br>많은 이벤트 혜택을 받아가세요!</p>
                     </div>
                     <div class="content1-btnbox">
                         <ul>
