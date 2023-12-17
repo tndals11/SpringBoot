@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <link rel="stylesheet" th:href="@{/css/reset.css}">
 <link rel="stylesheet" th:href="@{/css/header.css}">
 <link rel="stylesheet" th:href="@{/css/footer.css}">
@@ -119,29 +120,109 @@
         </div>
         <div class="main-wrap">
             <p>새로운 비밀번호를 입력해주세요.</p>
-            <form action="#" method="post" autocomplete="off">
                 <div class="int-area">
-                    <label for="passwd">현재 비밀번호</label>
-                    <input type="password" id="passwd" name="passwd" class="passwd" placeholder="현재 비밀번호를 입력해주세요." required>
+                    <label>현재 비밀번호</label>
+                    <input type="password" id="userPasswd" name="userPasswd" class="userPasswd" placeholder="현재 비밀번호를 입력해주세요." required>
+                    <div id="passwd_check1"></div>
                 </div>
                 <div class="int-area">
                     <label for="new-passwd">새로운 비밀번호</label>
                     <input type="password" id="new-passwd" name="new-passwd" class="new-passwd" placeholder="비밀번호(8자리이상+영문+숫자+특수문자)">
+                    <div id="passwd_check2"></div>
                 </div>
                 <div class="int-area">
                     <label for="new-passwd">새로운 비밀번호확인</label>
                     <input type="password" id="new-passwd-check" name="new-passwd-check" class="new-passwd-check" placeholder="비밀번호 확인">
+                    <div id="passwd_check3"></div>
                 </div>
                 <div class="btn-area">
-                    <button type="submit" id="btn">비밀번호 찾기</button>
+                    <button type="button" id="btn">비밀번호 찾기</button>
                 </div>
-            </form>
         </div>
     </div>
 </main>
         <!-- footer -->
         <th:block th:replace="~{fragment/footer::footerFragment}"></th:block>
         <!-- footer -->
+<script>
 
+    $(function () {
+           let checkPW = RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~!@#$%^&*()_+])[A-Za-z\d~!@#$%^&*()_+]{8,}$/);
+           let msg = document.querySelector(".msg");
+           let newPasswd = document.querySelector("#new-passwd");
+
+        function checkForm() {
+               $("#userPasswd").blur(function(){
+                    if($("#userPasswd").val() == "" ) {
+                       $("#passwd_check1").text("비밀번호를 입력해주세요").css("color", "red");
+                       return false;
+                   } else if (!checkPW.test($("#userPasswd").val())) {
+                      $("#passwd_check1").text("비밀번호 형식에 맞게 입력해주세요").css("color", "red");
+                      return false;
+                   }  else {
+                    $("#passwd_check1").text("")
+                    return true;
+                   }
+               });
+
+               //비밀번호 서로확인
+               $("#new-passwd").blur(function(){
+                    if ( $("#userPasswd").val() == $("#new-passwd").val() ) {
+                         $("#passwd_check2").text("현재 비밀번호와 동일합니다 다른 비밀번호를 사용해주세요.").css("color", "red");
+                    } else if ( checkPW.test($("#new-passwd").val()) ) {
+                       $("#passwd_check2").text("형식에 맞는 비밀번호입니다.").css("color", "green");
+                       return false;
+                   } else {
+                      $("#passwd_check2").text("비밀번호(8자리이상+영문+숫자+특수문자)를 사용해주세요.").css("color", "red");
+                   }
+               });
+
+               $("#new-passwd-check").blur(function(){
+                   if($("#new-passwd").val() != $("#new-passwd-check").val()){
+                       $("#passwd_check3").text("비밀번호와 일치하게 입력해주세요.").css("color", "red");
+                       return false;
+                   }else{
+                       $("#passwd_check3").text("비밀번호가 일치합니다.").css("color", "green");
+                       $("#userName").focus();
+                       return true;
+                   }
+               });
+      }
+      checkForm();
+
+           $("#btn").click(function(){
+               if($("#userPasswd").val() == "" || $("#new-passwd").val() == "" ||  $("#new-passwd-check").val() == "" ){
+                   alert("공백을 입력하세요.");
+                   location.href="/user/updatePasswd";
+                   return false;
+               }else if ($("#new-passwd").val() != $("#new-passwd-check").val()){
+                   alert("비밀번호가 서로 일치하지 않습니다.");
+                   location.href="/user/updatePasswd";
+                   return false;
+               } else if(!checkPW.test($("#userPasswd").val()) || !checkPW.test($("#new-passwd").val()) || !checkPW.test($("#new-passwd-check").val())) {
+                   alert("형식에 맞춰 작성해주세요.")
+                   location.href="/common/register";
+                   return false;
+               }
+
+              $.ajax({
+                 type: "post",
+                 url: "/user/updatePasswd",
+                 data: {newPasswd: newPasswd.value},
+                 dataType: "json",
+                 success: function(res) {
+                        if ( res.msg == "success") {
+                            alert("비밀번호가 변경되었습니다.");
+                            location.href = "/common/login";
+                        } else {
+                            alert("현재 사용하신 비밀번호와 동일하게 입력하였습니다.\n다시 입력해주세요");
+                        }
+                         }
+                 });
+
+           });
+    });
+
+</script>
 </body>
 </html>

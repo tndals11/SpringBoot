@@ -43,4 +43,10 @@ public interface UserMapper {
 
         @Update("UPDATE users SET user_st = '90', user_enddate = now() WHERE user_num = #{userNum}")
         public void deleteUserInfo(int userNum);
-    }
+
+        @Update("UPDATE users SET user_passwd = #{userPasswd} WHERE user_num = #{userNum}")
+        public void updateUserPasswd(String userPasswd ,int userNum);
+
+
+
+}

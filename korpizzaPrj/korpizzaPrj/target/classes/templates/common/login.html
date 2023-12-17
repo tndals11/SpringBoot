@@ -224,8 +224,6 @@
                     userPasswd: userPasswd.value,
                 };
 
-
-
                $.ajax({
                     type: "post",
                     url: "/common/checkLogin",
@@ -234,6 +232,9 @@
                     success: function(result) {
                     if ( result == 'success' ) {
                           location.href = "/user/afterLogin";
+                    } else if ( result == 'userDelete') {
+                           alert("이미 탈퇴하신 회원입니다.\n서비스센터에 문의해주세요");
+                           location.reload();
                     } else {
                         $("#passwd_check").text("비밀번호와 아이디를 다시 확인해주세요.").css("color", "red");
                         $("#passwd_check")[0].style.textAlign = 'center';

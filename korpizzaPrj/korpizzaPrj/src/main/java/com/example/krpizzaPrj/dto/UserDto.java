@@ -8,7 +8,7 @@ public class UserDto {
     private String userPasswd;
     private String userRegDate;
     private String userEndDate;
-    private String userSt;
+    private String userSt = "";
 
 
     public int getUserNum() {

@@ -214,14 +214,16 @@
         let btn2 = document.querySelector("#btn2");
 
         btn1.addEventListener('click', () => {
+              console.log("1");
              if ( confirm("정말 회원탈퇴를 하시겠습니까??") ) {
                     $.ajax({
-                 type: "get",
+                 type: "post",
                  url: "/user/deleteUserInfo",
                  dataType: "json",
                  success: function(res) {
                         if( res.msg == "success") {
-                            alert("삭제하였습니다.");
+                            alert("그동안 KoreaPizza를 이용해주셔서 감사합니다.");
+                            location.href  = "/common/login";
                         }
                          }
                  });
@@ -229,6 +231,7 @@
         });
 
         btn2.addEventListener('click', () => {
+            console.log("2");
             if($("#userName").val() == "" ){
                    alert("이름을 다시 입력해주세요");
                    $("#userName").focus();
@@ -246,6 +249,7 @@
                  dataType: "json",
                  success: function(res) {
                      if ( res.msg ==  "success"  ) {
+                        alert("회원수정이 완료되었습니다.");
                         location.href = "/common/login";
                      } else {
                         alert("동일한 이름입니다\n다시시도해주세요.");

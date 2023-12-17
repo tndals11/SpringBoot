@@ -215,16 +215,16 @@
       border: 2px solid #eee;
       padding: 10px 20px;
     }
-        .user-btn {
+   .list-btn {
       text-align: end;
-    }
-    .user-btn button {
-      padding: 10px 20px;
-      border: 0;
-      background-color: tomato;
       margin-right: 18px;
-      border-radius: 5px;
+    }
+    .list-btn button {
+      border: 0;
+      padding: 8px 15px;
+      background-color: black;
       color: white;
+      border-radius: 5px;
       cursor: pointer;
     }
 
@@ -309,9 +309,7 @@
             <div class="content-wrap">
                 <div class="user-list">
                     <hr>
-                    <div class="top-option">
-                            <p>선택한 회원 목록</p>
-                    </div>
+
                     <table>
                         <thead>
                         <tr>
@@ -331,8 +329,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="user-btn">
-                    <a th:href="@{/admin/userAdminPage}"><button>회원목록</button></a>
+                <div class="list-btn">
+                    <a href="/admin/userAdminPage"><button>목록으로</button></a>
                 </div>
             </div>
         </div>
