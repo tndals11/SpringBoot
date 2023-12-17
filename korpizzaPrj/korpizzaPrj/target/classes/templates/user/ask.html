@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <style>
+      /* 메인영역 */
+      .main-title {
+          padding-top: 200px;
+          text-align: center;
+        }
+      .container {
+        width: 100%;
+      }
+      .content-wrap {
+        width: 1280px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .content {
+        margin: 0 auto;
+        width: 500px;
+        align-items: center;
+      }
+        .content h1 {
+          font-size: 30px;
+          margin-top: 230px;
+        }
+        .content2-wrap {
+          width: 1280px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: 220px  2fr ;
+          grid-template-rows: 200px 100px 100px;
+          margin-top: 100px;
+        }
+        .user-info span {
+          display: flex;
+          margin-bottom: 20px;
+          font-weight: lighter;
+        }
+        .item {
+          text-align: start;
+          font-size: 24px;
+          margin: 20px 20px;
+          padding: 5px 10px;
+          display: flex;
+        }
+        .item:nth-child(odd) {
+          font-weight: bold;
+        }
+        .item:nth-child(1) {
+          padding-left: 15px;
+        }
+        .item:nth-child(2) {
+          width: 50%;
+        }
+        .item:nth-child(3) {
+          padding: 20px 15px;
+        }
+        .item:nth-child(4) {
+          width: 50%;
+        }
+        .item:nth-child(5) {
+          padding: 20px 15px;
+        }
+        .item:nth-child(6) {
+          width: 50%;
+        }
+        .item:nth-child(8) {
+          width: 100%;
+        }
+        .item:nth-child(10) {
+          width: 100%;
+        }
+        .item:nth-child(12) {
+          width: 100%;
+        }
+        .select-wrap {
+          display: flex;
+          width: 300px;
+          height: 65px;
+          align-items: center;
+
+        }
+        select {
+          -moz-appearance: none;
+          -webkit-appearance: none;
+          appearance: none;
+          width: 130px;
+          font-family: 'Noto Sans KR', sans-serif;
+          border: 0;
+          border-bottom: 1px solid #828282;
+          font-size: 18px;
+          padding: 5px 13px;
+          background: url(/images/user_imgs/arrowIcon.png) no-repeat 100% 50%/18px auto;
+        }
+        select:focus {
+          box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 0 3px -moz-mac-focusring;
+          outline: none;
+        }
+        .btn-style {
+          border: none;
+          border: 1px solid #828282;
+          color: black;
+          background-color: transparent;
+          padding: 10px 12px;
+          border-radius: 15px;
+          font-size: 16px;
+          cursor: pointer;
+          font-family: 'Noto Sans KR', sans-serif;
+          transform: 0.1s;
+          margin: 7px 0;
+        }
+        .btn-style:hover {
+          opacity: 0.8;
+          transition: 0.1s;
+        }
+
+        .text-box1 {
+          width: 100%;
+        }
+        .text-box1 input {
+          width: 100%;
+          height: 30px;
+          border: 0;
+          font-size: 20px;
+          font-family: 'Noto Sans KR', sans-serif;
+          padding: 20px 20px;
+          margin-bottom: 3.4px;
+          border-bottom: 1px solid #828282;
+        }
+        .text-box1 input:focus {
+          outline: none;
+        }
+        .text-box1 textarea {
+          width: 100%;
+          height: 100%;
+          border: 0;
+          font-size: 20px;
+          font-family: 'Noto Sans KR', sans-serif;
+          border-radius: 15px;
+          padding: 20px 20px;
+          border: 1px solid #bbb;
+          resize: none;
+        }
+        .text-box1 textarea:focus {
+          outline: none;
+        }
+        /* ---- file 영역 ---- */
+        .file-box {
+          width: 100%;
+        }
+        .btn-area {
+          display: flex;
+          width: 1280px;
+          margin-top: 100px;
+          margin-bottom: 60px;
+        }
+        .btn-area ul {
+          display: flex;
+          margin: 0 auto;
+        }
+        .btn-area .btn1 {
+          font-family: 'Noto Sans KR', sans-serif;
+          width: 200px;
+          height: 50px;
+          background-color: #f7f7f7;
+          color: black;
+          font-size: 23px;
+          border: 0;
+          border-radius: 15px;
+          cursor: pointer;
+          box-shadow: 1px 1px 1px #333;
+          letter-spacing: 1px;
+          box-shadow: 2px 2px 2px #888;
+          font-weight: bold;
+          margin-left: 50px;
+      }
+      .btn-area .btn1:hover {
+        opacity: 0.8;
+      }
+        .btn-area .btn2 {
+          font-family: 'Noto Sans KR', sans-serif;
+          width: 200px;
+          height: 50px;
+          background-color: #cf152d;
+          color: white;
+          font-size: 23px;
+          border: 0;
+          border-radius: 15px;
+          cursor: pointer;
+          box-shadow: 1px 1px 1px #333;
+          letter-spacing: 1px;
+          box-shadow: 2px 2px 2px #888;
+          font-weight: bold;
+          margin-left: 15px;
+        }
+        .btn-area .btn2:hover {
+          opacity: 0.8;
+        }
+        .filebox {
+          width: 100%;
+          font-family: 'Noto Sans KR', sans-serif;
+        }
+        .filebox .upload-name {
+          display: inline-block;
+          height: 40px;
+          padding: 0 10px;
+          vertical-align: middle;
+          border: 1px solid #dddddd;
+          color: #999999;
+          width: 88.3%;
+          font-size: 16px;
+      }
+      .filebox label {
+          display: inline-block;
+          padding: 6px 20px;
+          color: #fff;
+          vertical-align: middle;
+          background-color: #999999;
+          cursor: pointer;
+          height: 40px;
+          margin-left: 10px;
+          font-size: 18px;
+      }
+      .filebox input[type="file"] {
+          position: absolute;
+          width: 0;
+          height: 0;
+          padding: 0;
+          overflow: hidden;
+          border: 0;
+      }
+
+
+    </style>
+</head>
+<body>
+<!--header-->
+<th:block th:replace="~{fragment/afterLoginHeader::afterHeaderFragment}"></th:block>
+<!--header-->
+
+<!-- 메인영역 -->
+<div class="main-title">
+    <h1>1:1문의</h1>
+</div>
+<main>
+    <div class="container">
+        <div class="content-wrap">
+            <div class="content">
+            </div>
+        </div>
+        <div class="content2-wrap">
+            <div class="item">
+                <p>회원정보</p>
+            </div>
+            <div class="item">
+                <div class="user-info">
+                        <ul>
+                            <li>
+                                <span>이름 : [[${userName}]]</span>
+                            </li>
+                            <li>
+                                <span>이메일 : [[${userEmail}]]</span>
+                            </li>
+                            <li>
+                                <span>아이디 : [[${userId}]]</span>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+            <div class="item">
+                <p>문의유형</p>
+            </div>
+            <div class="item">
+                <div class="select-wrap">
+                    <select  id="user-option">
+                        <option value="1">회원문의</option>
+                        <option value="2">포인트문의</option>
+                        <option value="3">기타</option>
+                    </select>
+                </div>
+            </div>
+            <div class="item">
+                <p>문의내용</p>
+            </div>
+            <div class="item">
+                <div class="text-box1">
+                    <input type="text" placeholder="제목을 입력해주세요." id="subject" class="text-title">
+                </div>
+            </div>
+            <div class="item">
+                <p></p>
+            </div>
+            <div class="item">
+                <div class="text-box1">
+                    <textarea name="text-body" id="content" cols="30" rows="10" placeholder="내용을 입력해주세요." ></textarea>
+                </div>
+            </div>
+            <div class="item">
+                <p>첨부파일</p>
+            </div>
+            <div class="item">
+                <div class="filebox">
+                    <input class="upload-name" value="첨부파일" placeholder="첨부파일" >
+                    <label for="file">파일찾기</label>
+                    <input type="file" id="file">
+                </div>
+            </div>
+            <div class="btn-area">
+                <ul>
+                    <li>
+                        <button type="button" class="btn1">취소</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn2">등록</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</main>
+
+<!-- footer -->
+<th:block th:replace="~{fragment/footer::footerFragment}"></th:block>
+<!-- footer -->
+
+<!-- script 영역 -->
+    <script>
+        $( function () {
+           let subject = document.querySelector("#subject");
+           let content = document.querySelector("#content");
+           let sel = document.querySelector("#user-option");;
+
+        $("#file").on('change',function(){
+        var fileName = $("#file").val();
+        $(".upload-name").val(fileName);
+      });
+
+       $(".btn2").click(function(){
+         if($("#subject").val() == "" ||  $("#content").val() == "") {
+            alert("공백을 입력해주세요");
+         }
+
+        let obj = {
+           sel: sel.value,
+           subject: subject.value,
+           content: content.value,
+        }
+
+          $.ajax({
+                 type: "post",
+                 url: "/user/ask",
+                 enctype: 'multipart/form-data',
+                 data: JSON.stringify(obj),
+                 dataType: "json",
+                 success: function(res) {
+
+                      }
+         });
+      });
+});
+</script>
+</body>
+</html>

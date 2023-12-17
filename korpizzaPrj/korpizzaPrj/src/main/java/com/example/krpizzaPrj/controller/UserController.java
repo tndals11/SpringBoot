@@ -76,17 +76,27 @@ public class UserController {
     @ResponseBody
     public String checkLogin(@RequestBody UserDto userDto, HttpServletRequest request) { // Model <- 백단  // @ModelAttribute 뷰단 -> 백단
         UserDto userdto = userMapper.checkLogin(userDto);
+        System.out.println(userdto);
         String msg = "";
         if (userdto != null ) {
-            HttpSession session = request.getSession();
-            session.setAttribute("user", userdto);
-            msg = "success";
-        } else {
+            if ("90".equals(userdto.getUserSt())) {
+                System.out.println("1231313132");
+                msg = "userDelete";
+            }else {
+                HttpSession session = request.getSession();
+                session.setAttribute("user", userdto);
+                msg = "success";
+            }
+        }  else {
             msg = "fail";
         }
         return msg;
     }
-    
+
+
+
+
+
     // 아이디 찾기 페이지 값을 받아와 처리
     @PostMapping("/common/checkFindID")
     @ResponseBody
@@ -151,15 +161,18 @@ public class UserController {
     public Map<String, Object> setGoupDatePage(@RequestParam String userEmail, HttpSession session) {
         Map<String, Object> map = new HashMap<>();
         UserDto dto = (UserDto) session.getAttribute("user");
-
+        System.out.println(dto);
         int userName = dto.getUserNum();
         int result =  userMapper.setGoupDatePage( userEmail , userName);
-
+        System.out.println(userName);
+        System.out.println(result);
         if ( result > 0 ) {
             map.put("msg", "success");
         } else {
             map.put("msg", "fail");
         }
+
+        System.out.println(map);
         return map;
     }
 
@@ -170,7 +183,6 @@ public class UserController {
         model.addAttribute("userId",dto.getUserId());
         model.addAttribute("userName",dto.getUserName());
         model.addAttribute("userEmail", dto.getUserEmail());
-
 
 
         return "user/updateUserInfo";
@@ -184,6 +196,7 @@ public class UserController {
         System.out.println(userName);
         int userNum = dto.getUserNum();
         Map <String, Object> map = new HashMap<>();
+
         if ( userName.equals(dto.getUserName())) {
             map.put("msg", "fail");
         } else {
@@ -192,20 +205,45 @@ public class UserController {
         }
         return map;
     }
-    @GetMapping("/user/deleteUserInfo")
-    public String deleteUserInfo(HttpSession session, RedirectAttributes redirectAttributes) {
+
+    @PostMapping("/user/deleteUserInfo")
+    @ResponseBody
+    public Map<String, Object> deleteUserInfo(Model model, HttpSession session) {
         UserDto dto = (UserDto) session.getAttribute("user");
         int userNum = dto.getUserNum();
         String userSt = dto.getUserSt();
         userMapper.deleteUserInfo(userNum);
+        Map<String, Object> map = new HashMap<>();
 
-        if ( userSt.equals("90") ) {
-            redirectAttributes.addAttribute("msg", "fail");
+        if ( "90".equals(userSt) ) {
+            map.put("msg", "fail");
+
         } else {
-            redirectAttributes.addAttribute("msg", "success");
+            map.put("msg", "success");
         }
+        return map;
+    }
 
-        return "redirect:/user/updateUserInfo";
+
+    @GetMapping("/user/updatePasswd") public String getUserUpdatePasswd() {
+
+        return "/user/updatePasswd";
+    }
+
+    @PostMapping("/user/updatePasswd")
+    @ResponseBody
+    public Map <String, Object> UserUpdatePasswd(@RequestParam String newPasswd ,HttpSession session) {
+        Map <String, Object> map = new HashMap<>();
+        UserDto dto = (UserDto) session.getAttribute("user");
+        int userNum = dto.getUserNum();
+        if (newPasswd.equals(dto.getUserPasswd())) {
+            map.put("msg", "fail");
+        } else {
+            userMapper.updateUserPasswd(newPasswd,userNum);
+            map.put("msg", "success");
+        }
+        System.out.println(map);
+        return map;
     }
 
 
@@ -238,7 +276,22 @@ public class UserController {
 
         return "user/userinfo";
     }
-    @GetMapping("/user/updatePasswd") public String getUserUpdatePasswd() {
-        return "/user/updatePasswd";
+
+    @GetMapping("/user/ask")
+    public String userAsk(HttpSession session, Model model) {
+        UserDto dto = (UserDto) session.getAttribute("user");
+        model.addAttribute("userName", dto.getUserName());
+        model.addAttribute("userEmail", dto.getUserEmail());
+        model.addAttribute("userId", dto.getUserId());
+
+        return "user/ask";
+    }
+
+    @PostMapping("/user/ask")
+    @ResponseBody
+    public String setuserAsk() {
+
+
+        return "user/ask";
     }
 }
