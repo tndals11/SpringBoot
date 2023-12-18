@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 메뉴관리 페이지</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/aside.css}">
+
+<style>
+.body-container {
+margin: 0;
+padding: 0;
+}
+
+.main-container {
+margin: auto;
+margin-left: 160px;
+max-width: 100%;
+}
+
+.content-container {
+padding: 20px;
+width: 100%;
+}
+
+/* 메인 컨테이너 스타일 시작 */
+
+.main-container {
+ height: 1000px;
+ padding-left: 30px;
+ background-color: #f6f6f6;
+}
+
+.content-wrap {
+ background-color: white;
+ padding-bottom: 50px;
+ margin-bottom: 40px;
+}
+
+.content-wrap hr {
+ border: 0;
+ border: 1px solid whitesmoke;
+}
+
+.add-list {
+width: 100%;
+padding: 0 10px;
+border-radius: 3px;
+}
+
+.add-list> p {
+ margin-top: 15px;
+ font-size: 20px;
+ padding: 10px;
+}
+
+label {
+margin-bottom: 3px;
+}
+
+.input {
+padding:0.5rem 0.75rem;
+font-size: 14px;
+color:#212529;
+background-color:#fff;
+border:1px solid #ced4da;
+display:block;
+border-radius: 3px;
+outline:0;
+}
+
+.width-100 {
+width:100%;
+}
+
+.width-15 {
+width:15%;
+}
+
+.height-400 {
+height:400px;
+}
+
+form ul li {
+margin-top:20px;
+margin-bottom:5px;
+}
+
+.input:focus {
+border:2px solid #86b7fe;
+}
+
+.btn2 {
+padding: 8px 12px;
+color:#fff;
+border-radius: 3px;
+font-size: 14px;
+cursor:pointer;
+border:0;
+}
+
+.blue {
+background-color: #4169e1;
+}
+
+.red {
+background-color: #cf152d;
+}
+
+.noto {
+font-family: 'Noto Sans KR', sans-serif;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="body-container">
+<!--aside-->
+    <th:block th:replace="~{fragment/aside::asideFragment}"></th:block>
+<!--aside-->
+
+    <div class="main-container">
+        <div class="content-container">
+            <header>
+                <div class="header-title">
+                    <h2>메뉴관리</h2>
+                </div>
+            </header>
+            <hr>
+
+            <div class="content-wrap">
+                <div class="add-list">
+                    <p>메뉴 추가하기</p>
+                    <hr>
+                        <ul>
+                            <li>
+                                <label>카테고리</label>
+                                <select name="category" id="category" class="input width-15 noto">
+                                    <option value="100">프리미엄 피자</option>
+                                    <option value="200">오리지널 피자</option>
+                                    <option value="300">사이드 메뉴</option>
+                                    <option value="400">음료&기타</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>이름</label>
+                                <input type="text" name="itemName" class="input width-15 noto" />
+                            </li>
+                            <li>
+                                <label>가격</label>
+                                <input type="text" name="itemPrice" class="input width-15 noto" />
+                            </li>
+                            <li>
+                                <label>설명</label>
+                                <textarea name="itemIntro" class="input width-100 height-200 noto" maxlength="30"></textarea>
+                            </li>
+                            <li>
+                                <label>메뉴사진</label>
+                                <input type="file" name="file" class="input width-100" />
+                            </li>
+                            <li>
+                                <input type="button" value="글저장" class="btn2 red" onclick=" frmCheck()">
+                                <input type="reset" value="목록" class="btn2 blue" onclick="move()">
+                            </li>
+                        </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer></footer>
+</div>
+
+<script>
+    let name = document.querySelector("input[name=itemName]");
+    let price = document.querySelector("input[name=itemPrice]");
+    let intro = document.querySelector("textarea[name=itemIntro]");
+    let sel = document.querySelector("#category");
+
+    window.onload = function() {
+        document.querySelector("input[name=itemName]").focus();
+    }
+
+    function frmCheck() {
+        if(name.value == "") {
+            alert("상품이름을 입력하십시오.");
+            name.focus();
+            return false;
+        }
+
+        if(intro.value == "") {
+            alert("상품설명을 입력하십시오.");
+            intro.focus();
+            return false;
+        }
+
+        if(price.value == "") {
+            alert("상품설명을 입력하십시오.");
+            price.focus();
+            return false;
+        }
+
+        let obj = {
+          name: name.value,
+          price: price.value,
+          intro: intro.value,
+          sel: sel.value,
+        }
+        alert(JSON.stringify(obj));
+
+        $.ajax({
+          type: "post",
+          enctype:'multipart/form-data',
+          url: "/admin/addItem",
+          data: JSON.stringify(obj),
+          dataType: "json",
+          success: function(res) {
+
+        }
+
+
+        });
+
+
+
+    }
+
+    function move() {
+        location.href = "/admin/itemList";
+    }
+
+</script>
+
+</body>
+
+</html>
