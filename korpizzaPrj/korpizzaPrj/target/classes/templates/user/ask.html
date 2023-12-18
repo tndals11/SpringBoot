@@ -206,39 +206,39 @@
         .btn-area .btn2:hover {
           opacity: 0.8;
         }
-        .filebox {
-          width: 100%;
-          font-family: 'Noto Sans KR', sans-serif;
-        }
-        .filebox .upload-name {
-          display: inline-block;
-          height: 40px;
-          padding: 0 10px;
-          vertical-align: middle;
-          border: 1px solid #dddddd;
-          color: #999999;
-          width: 88.3%;
-          font-size: 16px;
-      }
-      .filebox label {
-          display: inline-block;
-          padding: 6px 20px;
-          color: #fff;
-          vertical-align: middle;
-          background-color: #999999;
-          cursor: pointer;
-          height: 40px;
-          margin-left: 10px;
-          font-size: 18px;
-      }
-      .filebox input[type="file"] {
-          position: absolute;
-          width: 0;
-          height: 0;
-          padding: 0;
-          overflow: hidden;
-          border: 0;
-      }
+<!--        .filebox {-->
+<!--          width: 100%;-->
+<!--          font-family: 'Noto Sans KR', sans-serif;-->
+<!--        }-->
+<!--        .filebox .upload-name {-->
+<!--          display: inline-block;-->
+<!--          height: 40px;-->
+<!--          padding: 0 10px;-->
+<!--          vertical-align: middle;-->
+<!--          border: 1px solid #dddddd;-->
+<!--          color: #999999;-->
+<!--          width: 88.3%;-->
+<!--          font-size: 16px;-->
+<!--      }-->
+<!--      .filebox label {-->
+<!--          display: inline-block;-->
+<!--          padding: 6px 20px;-->
+<!--          color: #fff;-->
+<!--          vertical-align: middle;-->
+<!--          background-color: #999999;-->
+<!--          cursor: pointer;-->
+<!--          height: 40px;-->
+<!--          margin-left: 10px;-->
+<!--          font-size: 18px;-->
+<!--      }-->
+<!--      .filebox input[type="file"] {-->
+<!--          position: absolute;-->
+<!--          width: 0;-->
+<!--          height: 0;-->
+<!--          padding: 0;-->
+<!--          overflow: hidden;-->
+<!--          border: 0;-->
+<!--      }-->
 
 
     </style>
@@ -283,7 +283,8 @@
             </div>
             <div class="item">
                 <div class="select-wrap">
-                    <select  id="user-option">
+                    <form onsubmit="frmCheck()" action="/user/ask" method="post" enctype="multipart/form-data">
+                    <select  id="optionst">
                         <option value="1">회원문의</option>
                         <option value="2">포인트문의</option>
                         <option value="3">기타</option>
@@ -295,7 +296,7 @@
             </div>
             <div class="item">
                 <div class="text-box1">
-                    <input type="text" placeholder="제목을 입력해주세요." id="subject" class="text-title">
+                    <input type="text" placeholder="제목을 입력해주세요." name="subject" class="text-title">
                 </div>
             </div>
             <div class="item">
@@ -303,7 +304,7 @@
             </div>
             <div class="item">
                 <div class="text-box1">
-                    <textarea name="text-body" id="content" cols="30" rows="10" placeholder="내용을 입력해주세요." ></textarea>
+                    <textarea name="content" cols="30" rows="10" placeholder="내용을 입력해주세요." ></textarea>
                 </div>
             </div>
             <div class="item">
@@ -311,8 +312,8 @@
             </div>
             <div class="item">
                 <div class="filebox">
-                    <input class="upload-name" value="첨부파일" placeholder="첨부파일" >
-                    <label for="file">파일찾기</label>
+
+                    <label >파일찾기</label>
                     <input type="file" id="file">
                 </div>
             </div>
@@ -322,10 +323,11 @@
                         <button type="button" class="btn1">취소</button>
                     </li>
                     <li>
-                        <button type="button" class="btn2">등록</button>
+                        <button type="submit" class="btn2" >등록</button>
                     </li>
                 </ul>
             </div>
+            </form>
         </div>
 </main>
 
@@ -335,38 +337,33 @@
 
 <!-- script 영역 -->
     <script>
-        $( function () {
-           let subject = document.querySelector("#subject");
-           let content = document.querySelector("#content");
-           let sel = document.querySelector("#user-option");;
-
+    $( function () {
         $("#file").on('change',function(){
         var fileName = $("#file").val();
         $(".upload-name").val(fileName);
       });
 
-       $(".btn2").click(function(){
-         if($("#subject").val() == "" ||  $("#content").val() == "") {
-            alert("공백을 입력해주세요");
-         }
-
-        let obj = {
-           sel: sel.value,
-           subject: subject.value,
-           content: content.value,
+    </script>
+        let select = document.getElementById('optionst');
+        function frmCheck(){
+            let subject = document.querySelector("input[name=subject]");
+            let content = document.querySelector("textarea[name = content]");
+            var optionst = document.getElementById("optionst").selectedIndex;
+           alert(optionst);
+        if(subject.value == ""){
+            alert("문의 제목을 입력하세요");
+            subject.focus();
+            return false;
         }
 
-          $.ajax({
-                 type: "post",
-                 url: "/user/ask",
-                 enctype: 'multipart/form-data',
-                 data: JSON.stringify(obj),
-                 dataType: "json",
-                 success: function(res) {
+        if(!content.value) {
+            alert("문의 내용를 입력하세요");
+            content.focus();
+            return false;
+        }
 
-                      }
-         });
-      });
+    }
+
 });
 </script>
 </body>
