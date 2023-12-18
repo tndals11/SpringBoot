@@ -2,6 +2,7 @@ package com.example.krpizzaPrj.dto;
 
 public class AskDto {
     private int id;
+    private String optionst;
     private String subject;
     private String writer;
     private String content;
@@ -17,13 +18,20 @@ public class AskDto {
     private String folderName;
     private String ext;
 
-
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getOptionst() {
+        return optionst;
+    }
+
+    public void setOptionst(String optionst) {
+        this.optionst = optionst;
     }
 
     public String getSubject() {
@@ -138,11 +146,11 @@ public class AskDto {
         this.ext = ext;
     }
 
-
     @Override
     public String toString() {
         return "AskDto{" +
                 "id=" + id +
+                ", optionst='" + optionst + '\'' +
                 ", subject='" + subject + '\'' +
                 ", writer='" + writer + '\'' +
                 ", content='" + content + '\'' +

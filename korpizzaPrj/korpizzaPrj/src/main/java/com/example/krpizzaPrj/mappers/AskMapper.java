@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Insert;
 
 public interface AskMapper {
 
-    @Insert("INSERT INTO board VALUES(NULL,#{subject},#{writer},#{content}, 0, NOW(), #{orgName}, #{savedFileName}, #{savedFilePathName}, #{savedFileSize}, #{folderName}, #{ext}, #{grp}, 1, 1)")
+    @Insert("INSERT INTO board VALUES(NULL,#{optioncode} #{subject},#{writer},#{content}, 0, NOW(), #{orgName}, #{savedFileName}, #{savedFilePathName}, #{savedFileSize}, #{folderName}, #{ext}, #{grp}, 1, 1)")
     void setAsk();
 
 }

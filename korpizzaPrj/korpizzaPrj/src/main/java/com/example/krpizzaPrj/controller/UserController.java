@@ -1,6 +1,7 @@
 package com.example.krpizzaPrj.controller;
 
 
+import com.example.krpizzaPrj.dto.AskDto;
 import com.example.krpizzaPrj.dto.UserDto;
 import com.example.krpizzaPrj.mappers.UserMapper;
 import jakarta.servlet.ServletOutputStream;
@@ -8,13 +9,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 public class UserController {
@@ -22,6 +29,8 @@ public class UserController {
     @Autowired
     UserMapper userMapper;
 
+    @Value("${fileDir}")
+    String fileDir;
 
     @GetMapping("/common/register")
     public String getRegister() {
@@ -288,8 +297,39 @@ public class UserController {
     }
 
     @PostMapping("/user/ask")
-    @ResponseBody
-    public String setuserAsk() {
+    public String setuserAsk(@ModelAttribute AskDto askDto, @RequestPart(value = "file", required = false) MultipartFile mf ) throws IOException {
+
+        System.out.println(askDto);
+        if (!mf.isEmpty()) {
+
+            String folderName = new SimpleDateFormat("yyyyMMdd").format(System.currentTimeMillis());
+
+            File makeFolder = new File(fileDir + folderName);
+
+
+            if (!makeFolder.exists()) {
+                makeFolder.mkdir();
+            }
+
+            String orgName = mf.getOriginalFilename();
+            String ext = orgName.substring(orgName.lastIndexOf("."));
+            String uuid = UUID.randomUUID().toString();
+
+            String saveFileName = uuid + ext;
+
+            String savedFilePathName = fileDir + folderName + "/" + saveFileName;
+
+            //boardDto -> db
+            askDto.setOrgName(orgName);
+            askDto.setSavedFileName(saveFileName);
+            askDto.setSavedFilePathName(savedFilePathName);
+            askDto.setSavedFileSize(mf.getSize());
+            askDto.setFolderName(folderName);
+            askDto.setExt(ext);
+
+            //파일 업로드 쓰기
+            mf.transferTo(new File(savedFilePathName));
+        }
 
 
         return "user/ask";
