@@ -528,6 +528,12 @@
    const registerBtn = document.querySelector('.btn2 button');
    let reviewcontent = document.querySelector('#reviewcontent');
 
+   function replaceContent() {
+         var contentElement = document.querySelector('.btn-style');
+         var newData = '<p>리뷰작성완료</p>'
+         contentElement.innerHTML = newData;
+   }
+
 
 
 
