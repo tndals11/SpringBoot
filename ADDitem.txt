@@ -460,12 +460,12 @@
                                 <div>
                                     <span style="font-size: 15px;">[[${orders.orderDate}]]</span>
                                 </div>
-                                <button type="button"  th:onclick="popupBtn([[${orders.Id}]])" class="btn-style" style="font-size: 15px;">리뷰쓰기</button>
+                                <button type="button" th:onclick="popupBtn([[${orders.Id}]])" class="btn-style" style="font-size: 15px;" th:if="${review.reviewSt} == ''">리뷰쓰기</button>
+                                <p th:if="${review.reviewSt} == 'Y'">리뷰작성완료</p>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-
 
                     <!-- modal 팝업창 -->
                     <div id="modal-container">
@@ -528,11 +528,9 @@
    const registerBtn = document.querySelector('.btn2 button');
    let reviewcontent = document.querySelector('#reviewcontent');
 
-   function replaceContent() {
-         var contentElement = document.querySelector('.btn-style');
-         var newData = '<p>리뷰작성완료</p>'
-         contentElement.innerHTML = newData;
-   }
+
+
+
 
 
 
@@ -565,7 +563,7 @@
         success: function (result) {
             if( result.msg == 'success'  ) {
                  alert("리뷰 작성이 완료되었습니다.\n감사합니다");
-                 replaceContent();
+                 $(".btn-style").text("리뷰작성완료");
                  location.href="/user/orders";
             } else {
                 alert("리뷰 작성이 취소되었습니다.");
