@@ -1,120 +1,608 @@
-사용자
-create table users (
-user_num int NOT NULL auto_increment,
-user_id varchar(20) NOT NULL,  
-user_passwd text NOT NULL, 
-user_email varchar(100) NOT NULL,
-user_name varchar(20) NOT NULL,
-user_regdate date NOT NULL,
-user_enddate date NOT NULL,
-PRIMARY KEY(user_num)
-);
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 
-ON UPDATE CASCADE ON DELETE RESTRICT    
-주문
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코리아 피자 메뉴선택 페이지</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" th:href="@{/css/reset.css}">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
 
-create table orders(
-order_num int NOT NULL AUTO_INCREMENT, -> primary key 
-order_count INT NOT NULL, --> 총 개수
-order_final_price INT NOT NULL, --> 총 가격
-order_comment varchar(50), --> 요청사항
-order_date DATE NOT NULL,  --> 주문날짜
-order_status varchar(20) NOT NULL, --> 주문 상태창
-PRIMARY KEY(order_num),
-user_num_fk int NOT NULL AUTO_INCREMENT, 
-FOREIGN KEY(user_num_fk) references users(user_num)
-ON UPDATE CASCADE ON DELETE RESTRICT       
-);
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+    /* 리셋 시작 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    ul li {
+      list-style: none;
+    }
+
+    * {
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    a {
+      color: black;
+      text-decoration: none;
+    }
+
+    /* 헤더/ 상단메뉴 스타일 시작 */
+    nav {
+      border: 0;
+      width: 100%;
+      padding-bottom: 20px;
+      box-shadow: 0px 0px 5px 0 rgba(90, 91, 95, 0.4);
+      position: fixed;
+      background-color: white;
+    }
+
+    .nav-wrap {
+      background-color: white;
+      width: 1280px;
+      margin: 0 auto;
+      padding: 20px 0;
+      color: black;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .nav-wrap #logo {
+      height: 50px;
+    }
+
+    .nav-wrap #logo img {
+      width: 100%;
+      height: 110px;
+      margin-top: -10px;
+    }
+
+    .nav-wrap ul {
+      display: flex;
+      margin-top: 17px;
+    }
+
+    .nav-wrap ul li {
+      list-style: none;
+      font-size: 23px;
+      margin: 0px 25px;
+      padding: 6px 25px;
+    }
+
+    .nav-wrap ul li:hover {
+      cursor: pointer;
+      background-color: #cf152d;
+      color: white;
+      border-radius: 30px;
+    }
+
+    .nav-wrap ul .cart {
+      margin: 0 25px;
+    }
+
+    .nav-wrap ul div img {
+      width: 100%;
+      height: 40px;
+    }
+
+    .nav-wrap ul div img:hover {
+      cursor: pointer;
+    }
+
+    /* 타이틀, 메뉴 카테고리 시작 */
+    main {
+      width: 1280px;
+      margin: 0 auto;
+      padding-top: 140px;
+    }
+
+    .title-wrap .title h2 {
+      font-size: 30px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .menu-btn ul {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      margin-top: 20px;
+      height: 50px;
+    }
+
+    .menu-btn ul li {
+      font-size: 20px;
+      color: rgb(204, 204, 204);
+      padding: 10px;
+      border-radius: 5px;
+      border: 0;
+      border: 1px solid rgba(204, 204, 204, 0.3);
+      margin-right: 20px;
+    }
+
+    .menu-btn ul a .premium {
+      background-color: #cf152d;
+      color: white;
+    }
+
+    .menu-btn ul li:hover {
+      color: white;
+      background-color: #cf152d;
+      cursor: pointer;
+    }
+
+    .title-wrap .pizza-title h2 {
+      font-size: 30px;
+      text-align: center;
+      margin-top: 50px;
+    }
 
 
-주문내역 
-create table orderList(
-order_num_fk INT NOT NULL AUTO_INCREMENT,
-item_id_fk INT NOT NULL AUTO_INCREMENT,
-item_cnt INT NOT NULL,
-FOREIGN KEY(order_num_fk) references orders(order_num),  
-FOREIGN KEY(item_id_fk) references items(item_id),
-ON UPDATE CASCADE ON DELETE RESTRICT         
-);
+    /* 이미지 시작 */
+    section {
+      margin-top: 10px;
+    }
 
-사이즈
-create table size(
-size_id int not null auto_increment 
-size_name char(1),
-primary key(size_id)
-);
+    section .section-wrap .section-content {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
 
-상품목록 
-create table items (
-item _id INT NOT NULL AUTO_INCREMENT,
-item_name VARCHAR(20) NOT NULL,
-item_price INT NOT NULL,
-category_id_fk int not null auto_increment,
-size_id_fk int not null auto_increment,
-PRIMARY KEY(item_id),
-FOREIGN KEY(category_id_fk) references category(category_id),
-FOREIGN KEY(size_id_fk) references size(size_id)
-);
+    section .section-wrap .section-content .img-wrap {
+      width: 400px;
+      padding: 10px;
+      border-radius: 7px;
+      border: 1px solid rgba(204, 204, 204, 0.3);
+      margin: 0 auto;
+      margin-top: 30px;
+    }
 
-카테고리 
-create table category(
-category_id int not null auto_increment,
-category_code varchar(10) NOT NULL ,
-category_name varchar(10) NOT NULL,
-primary key(category_id)	
-);
+    section .section-wrap .section-content .img-box img {
+      width: 100%;
+    }
 
-장바구니 
-create table cart(
-user_num_fk INT NOT NULL,
-item_id_fk INT NOT NULL AUTO_INCREMENT,
-item_cnt INT NOT NULL,
-FOREIGN KEY(user_num_fk) references users(user_num), 
-FOREIGN KEY(item_id_fk) references items(item_id),
-ON UPDATE CASCADE ON DELETE RESTRICT       
-);
+    .section-wrap .img-content {
+      text-align: center;
+    }
 
-===================================================================
-리뷰 페이지 
-create table review(
-review_num INT NOT NULL AUTO_INCREMENT
-user_num_fk INT NOT NULL,
-item_id_fk INT NOT NULL AUTO_INCREMENT,
-regdate date NOT NULL,
-review_content varchar(200),
-score int NOT NULL,
-FOREIGN KEY(user_num_fk) references users(user_num),  
-FOREIGN KEY(item_id_fk) references items(item_id),
-ON UPDATE CASCADE ON DELETE RESTRICT       
-);
+    .section-wrap .img-content h2 {
+      margin-top: 10px;
+    }
+
+    .section-wrap .img-content>p {
+      padding-top: 10px;
+      font-size: 18px;
+      height: 60px;
+    }
+
+    .section-wrap .section-content .img-content .price-wrap {
+      /* height: 50px; */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      margin-top: 15px;
+    }
+
+    .section-wrap .section-content .img-content .open {
+      font-size: 20px;
+      margin: 10px;
+      padding: 15px;
+      background-color: #cf152d;
+      color: white;
+      border: 2px solid rgba(204, 204, 204, 0.3);
+      border-radius: 30px;
+      display: none;
+    }
+
+    .hide-btn {
+      padding-top: 15px;
+      margin-top: 20px;
+      font-size: 20px;
+      background-color: #f6f6f6;
+      border-radius: 7px;
+      /* display: none; */
+    }
+
+    .hide-btn span button {
+      background-color: white;
+      border-radius: 40%;
+      border: 2px solid rgba(204, 204, 204, 0.3);
+      padding: 10px 13px;
+      font-size: 20px;
+    }
+
+    .hide-btn span {
+      margin: 0 5px;
+    }
+
+    .hide-btn button {
+      cursor: pointer;
+    }
+
+    .hide-btn span .add {
+      font-size: 20px;
+      margin: 10px 0 10px 5px;
+      padding: 15px;
+      border: 2px solid rgba(204, 204, 204, 0.3);
+      border-radius: 20px;
+    }
+
+    .section-wrap .section-content .img-content .add:hover {
+      color: white;
+      background-color: #cf152d;
+    }
 
 
-문의페이지
-create table ask(
-ask_num INT NOT NULL AUTO_INCREMENT
-user_num_fk INT NOT NULL,
-item_id_fk INT NOT NULL AUTO_INCREMENT,
-regdate date NOT NULL,
-ask_content text,
-regdate date,
-FOREIGN KEY(user_num_fk) references users(user_num),   
-FOREIGN KEY(item_id_fk) references items(item_id), 
-ON UPDATE CASCADE ON DELETE RESTRICT       
-);
+    /* 하단 상태 바 */
+    .status-bar-background {
+      position: sticky;
+      height: 20vh;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      align-items: end;
+      bottom: 0;
+    }
+
+    .status-bar-wrap {
+      width: 100%;
+      height: 65px;
+      display: flex;
+      justify-content: center;
+      background-color: #cf152d;
+    }
+
+    .status-bar-content {
+      width: 1280px;
+    }
+
+    .status-bar-content form ul {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .status-bar-content form ul div {
+      display: flex;
+    }
+
+    .status-bar-content form ul li {
+      font-size: 30px;
+      background-color: transparent;
+      color: white;
+    }
+
+    .status-bar-content form ul div:first-child li:first-child {
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+
+    .status-bar-content form ul div:nth-child(2) li {
+      margin-left: 100px;
+    }
+
+    .status-bar-content form ul div:nth-child(2) li:hover {
+      cursor: pointer;
+    }
+
+    .status-bar-content a .total-count {
+      position: absolute;
+      font-size: 25px;
+      font-weight: bold;
+      padding: 3px 15px 5px 15px;
+      margin-left: 5px;
+      margin-top: 1px;
+      background-color: white;
+      color: black;
+      border-radius: 50%;
+    }
+
+
+    /* footer 스타일 시작 */
+    footer {
+      background-color: #444;
+      padding: 30px 0 10px 0;
+    }
+
+    .footer-wrap {
+      width: 1280px;
+      margin: 0 auto;
+    }
+
+    .footer-wrap h2 {
+      color: #aaa;
+      letter-spacing: 2px;
+      font-size: 25px;
+    }
+
+    .footer-top span {
+      color: white;
+      margin-left: 15px;
+    }
+
+    .footer-top span i:hover {
+      color: gray;
+      transition: 0.5s;
+      cursor: pointer;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .footer-sns {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .footer-sns span {
+      color: #aaa;
+      font-size: 25px;
+    }
+
+    .footer-sns span i:hover {
+      color: white;
+      transition: 0.5s;
+      cursor: pointer;
+    }
+
+    .footer-main {
+      width: 1280px;
+    }
+
+    .footer-content {
+      font-size: 14px;
+      color: #aaa;
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .footer-content ul li:nth-child(2) {
+      margin-top: 5px;
+    }
+
+    .footer-content ul li:nth-child(3) {
+      margin-top: 5px;
+    }
+
+    .footer-content ul li:nth-child(4) {
+      margin-top: 5px;
+      margin-bottom: 50px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid white;
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+    }
+
+    .footer-bottom p {
+      margin-top: 7px;
+    }
+
+    .footer-sns span a {
+      color: white;
+    }
+  </style>
+  <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+
+<body>
+<!--header-->
+<div th:if = "${session.user == null}">
+  <th:block th:replace="~{fragment/header::headerFragment}"></th:block>
+</div>
+<div th:unless = "${session.user == null}">
+  <th:block th:replace="~{fragment/afterLoginHeader::afterHeaderFragment}"></th:block>
+</div>
+<!--header-->
+
+<main>
+
+  <div class="title-wrap">
+    <div class="title">
+      <h2>메뉴</h2>
+    </div>
+
+    <div class="menu-btn">
+      <ul>
+        <a th:href="@{/common/premium}">
+          <li class="premium">프리미엄 피자</li>
+        </a>
+        <a th:href="@{/common/original}">
+          <li class="original">오리지널 피자</li>
+        </a>
+        <a th:href="@{/common/side}">
+          <li class="side">사이드 메뉴</li>
+        </a>
+        <a th:href="@{/common/drink}">
+          <li>음료&기타</li>
+        </a>
+      </ul>
+    </div>
+
+    <div class="pizza-title">
+      <h2>프리미엄 피자</h2>
+    </div>
+
+  </div>
+
+  <section >
+    <div class="section-wrap">
+      <div class="section-content">
+        <div class="img-wrap" th:each="premium, p : ${premium}">
+          <div class="img-box">
+            <img th:src="@{|/${premium.folderName}/${premium.savedFileName}|}">
+          </div>
+          <div class="img-content">
+            <h2 class="item-name">[[${premium.itemName}]]</h2>
+            <p>[[${premium.itemIntro}]]</p>
+            <div class="hide-btn">
+              <p>
+                <span class="S_size"></span> <span class="S_price">[[${premium.itemPrice}]]</span>
+              </p>
+              <span>
+                  <button class="minus"><i class="fa-solid fa-minus"></i></button>
+                  <span class="count">1</span>
+                  <button class="plus"><i class="fa-solid fa-plus"></i></button>
+                  <button class="add">담기</button>
+                </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="status-bar-background">
+  <div class="status-bar-wrap">
+    <div class="status-bar-content">
+      <form action="">
+        <ul>
+          <div>
+            <li>결제금액</li>
+            <li><span class="total-price">30000원</span></li>
+          </div>
+
+          <div>
+            <li><a href="#" class="order-btn" style="color:white;">주문하기</a></li>
+            <li><a href="#" class="go-cart" style="color:white;">장바구니<span class="total-count"></span></a></li>
+          </div>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- footer -->
+<th:block th:replace="~{fragment/footer::footerFragment}"></th:block>
+<!-- footer -->
+
+
+<script>
+
+  $(document).ready(function () {
+
+
+    if (!localStorage.cart) {
+      localStorage.setItem("cart", JSON.stringify([]));
+    }
+
+    function updateCartUI() {
+      updateCartCount();
+      updateTotalPrice();
+    }
+
+      if (localStorage.cart) {
+        updateCartUI();
+      }
 
 
 
 
+    }
 
 
+    //+,- 버튼 클릭 시, 안에 숫자 변경
+    $(".plus, .minus").click(function () {
+      var $this = $(this);
+      var $count = $this.siblings(".count");
+      var count = parseInt($count.text());
 
-아이디찾기 페이지
-SELECT user_id FROM users WHERE user_name = 'koreait1234!!' AND user_email= '홍길동' ;
+      if ($this.hasClass("plus")) {
+        count++;
+      } else if ($this.hasClass("minus") && count > 1) {
+        count--;
+      }
+      $count.text(count);
 
+      updateCartCount();
+      updateTotalPrice();
 
-비밀번호 찾기 페이지
-SELECT user_passwd FROM users WHERE user_id = 'koreait1234' AND user_email = '홍길동';
+    });
 
+    //총 가격 업데이트
+    function updateTotalPrice() {
+      let cartItems = JSON.parse(localStorage.getItem("cart"));
+      let totalPrice = 0;
 
+      cartItems.forEach((item) => {
+        totalPrice += parseInt(item.itemPrice.replace(',', '')) * item.count;
+      });
 
-main 높이값 1000px
+      $(".total-price").text(totalPrice.toLocaleString('ko-KR') + '원');
+
+      localStorage.setItem("cart_totalPrice", totalPrice);
+    }
+
+    //장바구니 수량 변경
+    function updateCartCount() {
+      let cartitems = JSON.parse(localStorage.getItem("cart"));
+      let totalItems = cartitems.reduce((total, item) => total + item.count, 0);
+      document.querySelector(".total-count").textContent = totalItems;
+
+      localStorage.setItem("cart_totalCount", totalItems);
+    }
+
+    $(".add").click((e) => {
+      if (confirm("상품을 장바구니에 담으시겠습니까?")) {
+        let itemName = $(e.target).closest(".img-content").find('.item-name').text();
+        let itemSize = $(e.target).closest(".hide-btn").find('.S_size').text();
+        let itemPrice = $(e.target).closest(".hide-btn").find('.S_price').text();
+        let itemCount = $(e.target).siblings('.count').text();
+        let itemImg = "/images/cart_imgs/pizza3.png";
+
+        $(e.target).siblings('.count').text(1);
+        alert("상품이 장바구니에 담겼습니다.");
+
+        let cartitems = JSON.parse(localStorage.getItem("cart"));
+        let isItem = cartitems.find((item) => item.itemName == itemName);
+
+        if (isItem) {
+          isItem.count += parseInt(itemCount);
+        } else {
+          cartitems.push({ itemName: itemName, itemImg: itemImg, itemSize: itemSize, itemPrice: itemPrice, count: parseInt(itemCount) });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cartitems));
+
+        updateCartCount();
+        updateTotalPrice();
+      }
+    });
+
+    $(".order-btn, .go-cart").click((e) => {
+      e.preventDefault();
+
+      let cartItems = JSON.parse(localStorage.getItem("cart"));
+
+      if (!cartItems || cartItems.length === 0) {
+        window.location.replace('/common/emptyCart');
+      } else {
+        window.location.replace('/user/cart');
+      }
+    });
+
+  });
+</script>
+</body>
+
+</html>
